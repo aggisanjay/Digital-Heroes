@@ -41,14 +41,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    // Verify subscription status server-side
-    let user = store.getProfile(targetUserId);
+    // Verify subscription status server-side (Supabase first)
+    let user: any = null;
+    try {
+      const supabaseAdmin = createAdminClient();
+      const { data: dbProfile } = await supabaseAdmin.from('profiles').select('*').eq('id', targetUserId).maybeSingle();
+      if (dbProfile) user = dbProfile;
+    } catch (e) {}
+
     if (!user) {
-      try {
-        const supabaseAdmin = createAdminClient();
-        const { data: dbProfile } = await supabaseAdmin.from('profiles').select('*').eq('id', targetUserId).single();
-        if (dbProfile) user = dbProfile as any;
-      } catch (e) {}
+      user = store.getProfile(targetUserId);
     }
     if (user && user.subscription_status !== 'active') {
       return NextResponse.json(

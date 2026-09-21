@@ -10,11 +10,12 @@ import { store } from '@/lib/data/mock-db';
 
 interface Props {
   userId: string;
+  user?: Profile | null;
   onScoresChange?: () => void;
 }
 
-export default function TactileScorecard({ userId, onScoresChange }: Props) {
-  const [currentUser, setCurrentUser] = useState<Profile | null>(null);
+export default function TactileScorecard({ userId, user: propUser, onScoresChange }: Props) {
+  const [currentUser, setCurrentUser] = useState<Profile | null>(propUser || null);
   const [scores, setScores] = useState<Score[]>([]);
   const [scoreVal, setScoreVal] = useState<number>(36);
   const [dateVal, setDateVal] = useState<string>(new Date().toISOString().substring(0, 10));
@@ -25,8 +26,30 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
   const [conflictingScore, setConflictingScore] = useState<Score | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (propUser) {
+      setCurrentUser(propUser);
+    }
+  }, [propUser]);
+
   const loadScores = async () => {
-    setCurrentUser(store.getCurrentUser());
+    // 1. Fetch real session user if not provided or to ensure fresh subscription_status
+    try {
+      const authRes = await fetch('/api/auth/me');
+      if (authRes.ok) {
+        const authData = await authRes.json();
+        if (authData.user) {
+          setCurrentUser(authData.user);
+        }
+      } else if (propUser) {
+        setCurrentUser(propUser);
+      }
+    } catch {
+      if (propUser) setCurrentUser(propUser);
+      else setCurrentUser(store.getCurrentUser());
+    }
+
+    // 2. Fetch scores
     try {
       const res = await fetch(`/api/scores?userId=${encodeURIComponent(userId)}`);
       if (res.ok) {
@@ -46,7 +69,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
 
   useEffect(() => {
     loadScores();
-  }, [userId]);
+  }, [userId, propUser]);
 
   // Check for date collision in real time
   useEffect(() => {

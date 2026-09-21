@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { Target, RefreshCw, ChevronLeft } from 'lucide-react';
 import TactileScorecard from '@/components/scoring/TactileScorecard';
 
+import { Profile } from '@/lib/types';
+
 export default function DashboardScoresPage() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ export default function DashboardScoresPage() {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
           const data = await res.json();
-          if (data.user?.id) setUserId(data.user.id);
+          if (data.user) setUser(data.user);
         }
       } catch (e) {
         console.warn('Failed to load user:', e);
@@ -34,7 +36,7 @@ export default function DashboardScoresPage() {
     );
   }
 
-  if (!userId) {
+  if (!user) {
     return (
       <div className="p-8 text-center text-gray-500">
         Please sign in to view and log golf scores.
@@ -56,7 +58,7 @@ export default function DashboardScoresPage() {
         </div>
       </div>
 
-      <TactileScorecard userId={userId} />
+      <TactileScorecard userId={user.id} user={user} />
     </div>
   );
 }
