@@ -3,10 +3,9 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Check, Heart, Trophy, ShieldCheck, ArrowRight, Lock, CreditCard, ExternalLink, RefreshCw } from 'lucide-react';
+import { Check, Heart, Trophy, ShieldCheck, ArrowRight, Lock, CreditCard, RefreshCw } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import StripeCardPaymentForm from '@/components/payment/StripeCardPaymentForm';
 import { store } from '@/lib/data/mock-db';
 import { Charity, Profile } from '@/lib/types';
 
@@ -23,7 +22,6 @@ function SubscribeContent() {
   const [charityPct, setCharityPct] = useState<number>(15);
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [paymentMode, setPaymentMode] = useState<'card' | 'hosted'>('hosted');
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
 
   useEffect(() => {
@@ -345,103 +343,89 @@ function SubscribeContent() {
               </div>
             </div>
 
-            {/* Right Column: Payment Flow */}
+            {/* Right Column: Stripe Hosted Checkout Flow */}
             <div className="lg:col-span-5 space-y-6">
-              {/* Payment Method Toggle */}
-              <div className="flex gap-2 p-1 rounded-full bg-gray-100 border border-gray-200">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMode('card')}
-                  className={`flex-1 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
-                    paymentMode === 'card'
-                      ? 'bg-white text-[#11382B] shadow-xs'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <CreditCard className="w-3.5 h-3.5" />
-                  <span>Card (Elements)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMode('hosted')}
-                  className={`flex-1 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
-                    paymentMode === 'hosted'
-                      ? 'bg-white text-[#11382B] shadow-xs'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Stripe Hosted</span>
-                </button>
-              </div>
-
-              {paymentMode === 'card' ? (
-                /* Embedded Stripe Elements Form */
-                <StripeCardPaymentForm
-                  planType={planType}
-                  charityId={selectedCharityId}
-                  charityName={selectedCharity?.name}
-                  charityContributionPct={charityPct}
-                  fullName={fullName}
-                  email={email}
-                  userId={currentUser?.id}
-                />
-              ) : (
-                /* Hosted Checkout Summary */
-                <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/90 shadow-xl shadow-black/5 space-y-6">
-                  <h2 className="text-lg font-bold text-[#111827]">Hosted Checkout Summary</h2>
-
-                  <div className="space-y-3 text-xs divide-y divide-gray-100">
-                    <div className="flex justify-between pt-2">
-                      <span className="text-gray-500">Selected Plan:</span>
-                      <span className="font-bold text-[#111827]">
-                        {planType === 'yearly' ? 'Annual Champion ($190/yr)' : 'Monthly Flex ($19/mo)'}
-                      </span>
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/90 shadow-xl shadow-black/5 space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#11382B]/10 text-[#11382B] flex items-center justify-center">
+                      <CreditCard className="w-4 h-4" />
                     </div>
-                    <div className="flex justify-between pt-2">
-                      <span className="text-gray-500">Charity Partner:</span>
-                      <span className="font-bold text-[#E25B37] truncate max-w-[180px]">
-                        {selectedCharity?.name}
-                      </span>
-                    </div>
-                    <div className="flex justify-between pt-2">
-                      <span className="text-gray-500">Charity Allocation:</span>
-                      <span className="font-mono font-bold text-[#111827]">{charityPct}%</span>
+                    <div>
+                      <h2 className="text-base sm:text-lg font-bold text-[#111827]">
+                        Stripe Secure Checkout
+                      </h2>
+                      <p className="text-[11px] text-gray-500">Official Hosted Payment Portal</p>
                     </div>
                   </div>
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-[#11382B] border border-emerald-200 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    Encrypted
+                  </span>
+                </div>
 
-                  <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-500">Total Due Today:</span>
-                    <span className="text-3xl font-black font-mono text-[#11382B]">
-                      {planType === 'yearly' ? '$190.00' : '$19.00'}
+                <div className="space-y-3 text-xs divide-y divide-gray-100">
+                  <div className="flex justify-between pt-2">
+                    <span className="text-gray-500">Selected Plan:</span>
+                    <span className="font-bold text-[#111827]">
+                      {planType === 'yearly' ? 'Annual Champion ($190/yr)' : 'Monthly Flex ($19/mo)'}
                     </span>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={handleHostedCheckout}
-                    disabled={isRedirecting}
-                    className="w-full py-4 rounded-full bg-[#11382B] hover:bg-[#0c281e] text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99] disabled:opacity-50"
-                  >
-                    {isRedirecting ? (
-                      <>
-                        <RefreshCw className="w-4 h-4 animate-spin" />
-                        <span>Connecting to Stripe Secure Checkout...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Proceed to Stripe Checkout</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-
-                  <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Secure SSL Checkout via Stripe</span>
+                  <div className="flex justify-between pt-2">
+                    <span className="text-gray-500">Charity Partner:</span>
+                    <span className="font-bold text-[#E25B37] truncate max-w-[180px]">
+                      {selectedCharity?.name || 'Selected Charity Partner'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-2">
+                    <span className="text-gray-500">Charity Allocation:</span>
+                    <span className="font-mono font-bold text-[#111827]">{charityPct}%</span>
                   </div>
                 </div>
-              )}
+
+                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
+                  <span className="text-xs font-bold text-gray-500">Total Due Today:</span>
+                  <span className="text-3xl font-black font-mono text-[#11382B]">
+                    {planType === 'yearly' ? '$190.00' : '$19.00'}
+                  </span>
+                </div>
+
+                {/* Accepted Payment Methods */}
+                <div className="space-y-2 pt-1">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                    Accepted on Stripe Portal
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-600 font-semibold">
+                    <span className="px-2.5 py-1 rounded-lg bg-gray-100 border border-gray-200">Credit / Debit Cards</span>
+                    <span className="px-2.5 py-1 rounded-lg bg-gray-100 border border-gray-200">Apple Pay</span>
+                    <span className="px-2.5 py-1 rounded-lg bg-gray-100 border border-gray-200">Google Pay</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleHostedCheckout}
+                  disabled={isRedirecting}
+                  className="w-full py-4 rounded-full bg-[#11382B] hover:bg-[#0c281e] text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+                >
+                  {isRedirecting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>Connecting to Stripe Secure Checkout...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Proceed to Stripe Checkout</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+
+                <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>PCI-DSS Level 1 Certified • Cancel Anytime in Dashboard</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
