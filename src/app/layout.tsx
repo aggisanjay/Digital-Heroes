@@ -37,9 +37,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${roboto.variable} ${inter.variable} h-full antialiased`}
+      className={`${roboto.variable} ${inter.variable} antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-[#FAFAF8] text-[#111827]">
+      <body className="min-h-screen flex flex-col bg-[#FAFAF8] text-[#111827]">
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>
