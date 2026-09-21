@@ -127,57 +127,18 @@ export default function StripeCardPaymentForm({
           email,
           fullName,
           userId,
+          returnUrl: window.location.origin,
         }),
       });
-      const intentData = await intentRes.json();
+      const checkoutData = await intentRes.json();
 
-      // 2. Simulate network latency of card confirmation
-      await new Promise(r => setTimeout(r, 1000));
-
-      // 3. Confirm & persist subscription in Supabase online database and state
-      const confirmRes = await fetch('/api/subscription/confirm', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          planType,
-          charityId,
-          charityContributionPct,
-          stripePaymentId: intentData.clientSecret || 'pi_real_' + Math.random().toString(36).substring(2, 10),
-        }),
-      });
-
-      if (!confirmRes.ok) {
-        const errData = await confirmRes.json();
-        console.warn('Subscription confirmation notice:', errData.error);
+      if (!intentRes.ok || !checkoutData.url) {
+        throw new Error(checkoutData.error || 'Unable to connect to Stripe billing service.');
       }
 
-      // 4. Immediately activate subscription in client local store so UI updates to Active Subscriber
-      store.createOrUpdateSubscription(userId, planType, 'active', intentData.clientSecret || 'sub_' + Math.random().toString(36).substring(2, 8));
-      store.updateProfile(userId, {
-        subscription_status: 'active',
-        charity_id: charityId,
-        charity_contribution_pct: charityContributionPct,
-      });
-      store.setCurrentUser(userId);
-
-      setIsSuccess(true);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#00F29D', '#00D2FF', '#FF6E40'],
-      });
-
-
-
-      setTimeout(() => {
-        if (onSuccess) {
-          onSuccess();
-        } else {
-          router.push('/dashboard?payment=success');
-        }
-      }, 1500);
+      // Redirect directly to Stripe Checkout
+      window.location.href = checkoutData.url;
+      return;
     } catch (err: any) {
       setErrorMsg(err.message || 'Payment processing failed. Please retry.');
     } finally {

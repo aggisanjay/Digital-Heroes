@@ -2,37 +2,61 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import { Target, RefreshCw, ChevronLeft } from 'lucide-react';
 import TactileScorecard from '@/components/scoring/TactileScorecard';
-import { store } from '@/lib/data/mock-db';
-import { Profile } from '@/lib/types';
 
-export default function ScoresPage() {
-  const [user, setUser] = useState<Profile | null>(null);
+export default function DashboardScoresPage() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setUser(store.getCurrentUser());
+    async function loadUser() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user?.id) setUserId(data.user.id);
+        }
+      } catch (e) {
+        console.warn('Failed to load user:', e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadUser();
   }, []);
 
-  return (
-    <main className="min-h-screen flex flex-col bg-[#06080F]">
-      <Navbar />
-      <div className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 pt-28 pb-20">
-        <div className="mb-6">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-xs text-[#94A3B8] hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Dashboard</span>
-          </Link>
-        </div>
-
-        {user && <TactileScorecard userId={user.id} />}
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <RefreshCw className="w-6 h-6 text-[#00F29D] animate-spin" />
       </div>
-      <Footer />
-    </main>
+    );
+  }
+
+  if (!userId) {
+    return (
+      <div className="p-8 text-center text-[#94A3B8]">
+        Please sign in to view and log golf scores.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-200">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black text-white flex items-center gap-2.5">
+            <Target className="w-6 h-6 text-[#00F29D]" />
+            <span>Tactile Scorecard & Rolling Rounds</span>
+          </h1>
+          <p className="text-xs text-[#94A3B8] mt-1">
+            Log your tournament Stableford scores (1–45). Your 5 latest scores automatically form your monthly draw ticket.
+          </p>
+        </div>
+      </div>
+
+      <TactileScorecard userId={userId} />
+    </div>
   );
 }

@@ -1,94 +1,88 @@
 import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { store } from '@/lib/data/mock-db';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { email, password } = body;
+    const { email, password } = await req.json();
 
-    if (!email) {
+    if (!email || !password) {
       return NextResponse.json(
-        { error: 'Email is required' },
+        { error: 'Email and password are required.' },
         { status: 400 }
       );
     }
 
-    const supabaseAdmin = createAdminClient();
-    let supabaseUser: any = null;
+    const cleanEmail = email.toLowerCase().trim();
+    const cookieStore = await cookies();
 
-    // 1. Query Supabase Auth for existing user
-    try {
-      const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
-      supabaseUser = usersData?.users?.find(
-        (u) => u.email?.toLowerCase() === email.toLowerCase()
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xeqopglggsjgukezraii.supabase.co';
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlcW9wZ2xnZ3NqZ3VrZXpyYWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5NzAwNjcsImV4cCI6MjEwNTU0NjA2N30.a0bqUm5kfkWoMmg_msc5YDlC_tkqm2C0cyGzz5DmuM4';
+
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          );
+        },
+      },
+    });
+
+    // Real Supabase Auth verification
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password,
+    });
+
+    if (authError || !authData.user) {
+      return NextResponse.json(
+        { error: authError?.message || 'Invalid email or password.' },
+        { status: 401 }
       );
-    } catch (authErr: any) {
-      console.warn('Supabase auth search warning:', authErr.message);
     }
 
-    // 2. Also check if profile exists in Supabase DB table
-    let dbProfile: any = null;
-    if (supabaseUser) {
-      try {
-        const { data } = await supabaseAdmin
-          .from('profiles')
-          .select('*, charity:charities(*)')
-          .eq('id', supabaseUser.id)
-          .single();
-        dbProfile = data;
-      } catch (dbErr: any) {
-        // Table may not have been migrated yet
-      }
-    }
+    // Fetch authoritative user profile from database
+    const admin = createAdminClient();
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('*, charity:charities(*)')
+      .eq('id', authData.user.id)
+      .maybeSingle();
 
-    // 3. Fallback/Sync with store
-    const localUser = store.login(email);
-    if (supabaseUser) {
-      localUser.id = supabaseUser.id;
-      if (supabaseUser.user_metadata?.full_name) {
-        localUser.full_name = supabaseUser.user_metadata.full_name;
-      }
-      if (supabaseUser.user_metadata?.role) {
-        localUser.role = supabaseUser.user_metadata.role;
-      }
-      if (dbProfile) {
-        localUser.subscription_status = dbProfile.subscription_status || localUser.subscription_status;
-        localUser.charity_id = dbProfile.charity_id || localUser.charity_id;
-      }
-      store.setCurrentUser(localUser.id);
-    }
+    const role = profile?.role || authData.user.user_metadata?.role || 'subscriber';
+    const subscriptionStatus = profile?.subscription_status || 'inactive';
 
-    const destination = localUser.role === 'admin'
+    const destination = role === 'admin'
       ? '/admin'
-      : localUser.subscription_status === 'active'
+      : subscriptionStatus === 'active'
       ? '/dashboard'
       : '/subscribe';
 
-    const res = NextResponse.json({
+    // Clear legacy unverified cookies if they exist
+    cookieStore.delete('dh_user_id');
+    cookieStore.delete('dh_user_role');
+    cookieStore.delete('dh_sub_status');
+    cookieStore.delete('dh_user_email');
+
+    return NextResponse.json({
       success: true,
-      user: localUser,
-      supabaseConnected: !!supabaseUser,
+      user: {
+        id: authData.user.id,
+        email: authData.user.email,
+        full_name: profile?.full_name || authData.user.user_metadata?.full_name || '',
+        role,
+        subscription_status: subscriptionStatus,
+        charity_id: profile?.charity_id || null,
+        charity: profile?.charity || null,
+      },
       destination,
     });
-
-    const cookieOptions = {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      sameSite: 'lax' as const,
-    };
-
-    res.cookies.set('dh_user_id', localUser.id, cookieOptions);
-    res.cookies.set('dh_user_role', localUser.role || 'subscriber', cookieOptions);
-    res.cookies.set('dh_sub_status', localUser.subscription_status || 'inactive', cookieOptions);
-    res.cookies.set('dh_user_email', localUser.email, cookieOptions);
-
-    return res;
-
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || 'Login failed' },
-      { status: 500 }
-    );
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || 'Login failed.' }, { status: 500 });
   }
 }

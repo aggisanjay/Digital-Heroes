@@ -34,6 +34,7 @@ export async function PUT(req: Request) {
     if (role) updates.role = role;
     if (subscription_status) updates.subscription_status = subscription_status;
     if (charity_contribution_pct !== undefined) updates.charity_contribution_pct = charity_contribution_pct;
+    if (body.charity_id !== undefined) updates.charity_id = body.charity_id;
 
     const { data, error } = await supabase
       .from('profiles')

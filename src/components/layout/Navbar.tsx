@@ -31,7 +31,17 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const refreshUser = () => {
+  const refreshUser = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.user) {
+          setCurrentUser(data.user);
+          return;
+        }
+      }
+    } catch (e) {}
     setCurrentUser(store.getCurrentUser());
   };
 

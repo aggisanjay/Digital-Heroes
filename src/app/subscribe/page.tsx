@@ -51,22 +51,7 @@ function SubscribeContent() {
   const handleHostedCheckout = async () => {
     setIsRedirecting(true);
     try {
-      let targetUserId = currentUser?.id;
-      if (targetUserId) {
-        store.createOrUpdateSubscription(targetUserId, planType, 'active');
-        store.updateProfile(targetUserId, {
-          charity_contribution_pct: charityPct,
-          subscription_status: 'active',
-          charity_id: selectedCharityId,
-        });
-      } else {
-        const user = store.register(email, fullName, selectedCharityId, planType);
-        store.updateProfile(user.id, {
-          charity_contribution_pct: charityPct,
-          subscription_status: 'active',
-        });
-        targetUserId = user.id;
-      }
+      const targetUserId = currentUser?.id;
 
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -85,11 +70,11 @@ function SubscribeContent() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        router.push('/dashboard?payment=success');
+        alert(data.error || 'Unable to connect to Stripe payment gateway.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      router.push('/dashboard?payment=success');
+      alert(err.message || 'Unable to connect to Stripe.');
     } finally {
       setIsRedirecting(false);
     }

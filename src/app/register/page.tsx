@@ -47,27 +47,17 @@ export default function RegisterPage() {
       }
 
       // If user already exists and has an active subscription, log them straight into dashboard!
-      if (data.isSubscribed || data.destination === '/dashboard' || data.destination === '/admin') {
-        const activeUser = data.user || store.login(email);
-        store.setProfile(activeUser);
-        store.setCurrentUser(activeUser.id);
+      const user = data.user;
+      if (user) {
+        store.setProfile(user);
+        store.setCurrentUser(user.id);
         if (typeof window !== 'undefined') {
-          localStorage.setItem('dh_user_email', activeUser.email);
-          localStorage.setItem('dh_current_user_id', activeUser.id);
+          localStorage.setItem('dh_user_email', user.email);
+          localStorage.setItem('dh_current_user_id', user.id);
         }
-        router.push(data.destination || '/dashboard');
-        return;
       }
 
-      // New user or unpaid registration: save profile and navigate to subscription
-      const user = data.user || store.register(email, fullName, selectedCharityId, plan);
-      store.setProfile(user);
-      store.setCurrentUser(user.id);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('dh_user_email', user.email);
-        localStorage.setItem('dh_current_user_id', user.id);
-      }
-
+      router.refresh();
       router.push(data.destination || `/subscribe?charityId=${encodeURIComponent(selectedCharityId)}&plan=${plan}`);
 
     } catch (err: any) {

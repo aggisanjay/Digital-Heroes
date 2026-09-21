@@ -54,25 +54,26 @@ function LoginForm() {
         throw new Error(data.error || 'Authentication error.');
       }
 
-      const user = data.user || store.login(email);
-      if (data.user) {
-        store.setProfile(data.user);
+      const user = data.user;
+      if (user) {
+        store.setProfile(user);
       }
-      setSuccessMessage(`Authentication successful! Welcome, ${user.full_name || email}.`);
+      setSuccessMessage(`Authentication successful! Welcome, ${user?.full_name || email}.`);
 
       setTimeout(() => {
+        router.refresh();
         if (redirectPath) {
           router.push(redirectPath);
         } else if (data.destination) {
           router.push(data.destination);
-        } else if (user.role === 'admin') {
+        } else if (user?.role === 'admin') {
           router.push('/admin');
-        } else if (user.subscription_status !== 'active') {
+        } else if (user?.subscription_status !== 'active') {
           router.push('/subscribe');
         } else {
           router.push('/dashboard');
         }
-      }, 500);
+      }, 400);
 
     } catch (err: any) {
       setErrorMessage(err.message || 'Authentication error. Please check your credentials.');
