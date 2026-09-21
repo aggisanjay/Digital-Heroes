@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, CreditCard, ShieldCheck, CheckCircle2, AlertCircle, Sparkles, Heart } from 'lucide-react';
+import { Lock, CreditCard, ShieldCheck, CheckCircle2, AlertCircle, Heart } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { store } from '@/lib/data/mock-db';
 
@@ -116,7 +116,7 @@ export default function StripeCardPaymentForm({
     setIsProcessing(true);
 
     try {
-      // 1. Create or get payment intent from server
+      // 1. Create or get payment intent / checkout session from server
       const intentRes = await fetch('/api/stripe/payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,67 +147,69 @@ export default function StripeCardPaymentForm({
   };
 
   return (
-    <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+    <div className="bg-white border border-gray-200/90 rounded-3xl p-6 sm:p-8 shadow-xl shadow-black/5 space-y-6 text-[#111827]">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-[#00F29D]" />
-            <h3 className="text-base sm:text-lg font-bold text-white">
-              Stripe Secure Card Payment
+            <div className="w-8 h-8 rounded-full bg-[#11382B]/10 text-[#11382B] flex items-center justify-center">
+              <CreditCard className="w-4 h-4" />
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-[#111827]">
+              Stripe Secure Payment
             </h3>
           </div>
-          <p className="text-xs text-[#94A3B8] mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             Test Mode Active • PCI-DSS Level 1 Encrypted
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#00F29D]/10 border border-[#00F29D]/20 text-[#00F29D] text-[10px] font-bold">
-          <ShieldCheck className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#11382B] text-xs font-bold">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
           <span>TEST MODE</span>
         </div>
       </div>
 
       {/* Plan & Charity Snapshot */}
-      <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2 text-xs">
+      <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-2 text-xs">
         <div className="flex justify-between items-center">
-          <span className="text-[#94A3B8]">{planLabel}:</span>
-          <span className="text-xl font-mono font-black text-white">{price}</span>
+          <span className="text-gray-600">{planLabel}:</span>
+          <span className="text-xl font-mono font-black text-[#11382B]">{price}</span>
         </div>
-        <div className="flex justify-between items-center text-[#94A3B8]">
+        <div className="flex justify-between items-center text-gray-600">
           <span className="flex items-center gap-1">
-            <Heart className="w-3.5 h-3.5 text-[#FF6E40]" /> Charity Allocation ({charityContributionPct}%):
+            <Heart className="w-3.5 h-3.5 text-[#E25B37]" /> Charity Allocation ({charityContributionPct}%):
           </span>
-          <span className="text-[#FF6E40] font-bold truncate max-w-[160px]">
+          <span className="text-[#E25B37] font-bold truncate max-w-[180px]">
             {charityName || 'Selected Cause'}
           </span>
         </div>
       </div>
 
-      {/* Quick Test Presets for Evaluator */}
+      {/* Quick Test Presets */}
       <div className="space-y-1.5">
-        <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider block">
+        <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
           One-Click Test Cards:
         </span>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => fillTestCard('success')}
-            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-[#00F29D] font-mono transition-colors"
+            className="px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs text-[#11382B] font-mono font-semibold transition-colors"
           >
             4242 (Success)
           </button>
           <button
             type="button"
             onClick={() => fillTestCard('declined')}
-            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-rose-400 font-mono transition-colors"
+            className="px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs text-rose-700 font-mono font-semibold transition-colors"
           >
             4002 (Decline)
           </button>
           <button
             type="button"
             onClick={() => fillTestCard('insufficient')}
-            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-amber-400 font-mono transition-colors"
+            className="px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs text-amber-800 font-mono font-semibold transition-colors"
           >
             0999 (No Funds)
           </button>
@@ -217,7 +219,7 @@ export default function StripeCardPaymentForm({
       {/* Card Input Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">
+          <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
             Card Number
           </label>
           <div className="relative">
@@ -228,18 +230,18 @@ export default function StripeCardPaymentForm({
               placeholder="4242 4242 4242 4242"
               value={cardNumber}
               onChange={handleCardChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#06080F] border border-white/10 text-white font-mono text-sm tracking-wider focus:outline-none focus:border-[#00F29D] transition-colors"
+              className="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 text-[#111827] font-mono text-sm tracking-wider focus:outline-none focus:bg-white focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-all"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-xs text-[#94A3B8]">
-              <span className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-bold">VISA</span>
-              <span className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-bold">MC</span>
+            <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="px-1.5 py-0.5 rounded bg-gray-200 text-[10px] font-bold">VISA</span>
+              <span className="px-1.5 py-0.5 rounded bg-gray-200 text-[10px] font-bold">MC</span>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
               Expires
             </label>
             <input
@@ -249,12 +251,12 @@ export default function StripeCardPaymentForm({
               placeholder="MM/YY"
               value={expiry}
               onChange={handleExpiryChange}
-              className="w-full px-3 py-3 rounded-xl bg-[#06080F] border border-white/10 text-white font-mono text-sm text-center focus:outline-none focus:border-[#00F29D]"
+              className="w-full px-3 py-3 rounded-2xl bg-gray-50 border border-gray-200 text-[#111827] font-mono text-sm text-center focus:outline-none focus:bg-white focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
               CVC
             </label>
             <input
@@ -264,13 +266,13 @@ export default function StripeCardPaymentForm({
               placeholder="123"
               value={cvc}
               onChange={e => setCvc(e.target.value.replace(/[^0-9]/g, ''))}
-              className="w-full px-3 py-3 rounded-xl bg-[#06080F] border border-white/10 text-white font-mono text-sm text-center focus:outline-none focus:border-[#00F29D]"
+              className="w-full px-3 py-3 rounded-2xl bg-gray-50 border border-gray-200 text-[#111827] font-mono text-sm text-center focus:outline-none focus:bg-white focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#94A3B8] mb-1.5">
-              Postal / ZIP
+            <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
+              ZIP Code
             </label>
             <input
               type="text"
@@ -278,30 +280,30 @@ export default function StripeCardPaymentForm({
               placeholder="90210"
               value={zip}
               onChange={e => setZip(e.target.value)}
-              className="w-full px-3 py-3 rounded-xl bg-[#06080F] border border-white/10 text-white text-sm text-center focus:outline-none focus:border-[#00F29D]"
+              className="w-full px-3 py-3 rounded-2xl bg-gray-50 border border-gray-200 text-[#111827] text-sm text-center focus:outline-none focus:bg-white focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-all"
             />
           </div>
         </div>
 
         {errorMsg && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-400 flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-rose-500" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {isSuccess && (
-          <div className="p-4 rounded-xl bg-[#00F29D]/10 border border-[#00F29D]/30 text-center space-y-1">
-            <CheckCircle2 className="w-6 h-6 text-[#00F29D] mx-auto" />
-            <p className="text-xs font-bold text-white">Payment Authorized & Confirmed!</p>
-            <p className="text-[11px] text-[#94A3B8]">Redirecting to your subscriber dashboard...</p>
+          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-1">
+            <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto" />
+            <p className="text-xs font-bold text-[#11382B]">Payment Authorized & Confirmed!</p>
+            <p className="text-[11px] text-gray-600">Redirecting to your subscriber dashboard...</p>
           </div>
         )}
 
         <button
           type="submit"
           disabled={isProcessing || isSuccess}
-          className="w-full py-4 rounded-xl btn-primary text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-[#00F29D]/20"
+          className="w-full py-4 rounded-full bg-[#11382B] hover:bg-[#0c281e] text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#11382B]/10 transition-all active:scale-[0.99] disabled:opacity-50"
         >
           <Lock className="w-3.5 h-3.5" />
           <span>
@@ -313,8 +315,8 @@ export default function StripeCardPaymentForm({
           </span>
         </button>
 
-        <div className="flex items-center justify-center gap-2 text-[10px] text-[#64748B] pt-1">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#00F29D]" />
+        <div className="flex items-center justify-center gap-2 text-[11px] text-gray-500 pt-1">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
           <span>Card details are tokenized directly with Stripe. Never stored locally.</span>
         </div>
       </form>

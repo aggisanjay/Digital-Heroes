@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Roboto, Inter } from "next/font/google";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  weight: ["300", "400", "500", "700", "900"],
   display: "swap",
 });
 
@@ -27,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
+import SmoothScrollProvider from "@/components/ui/SmoothScrollProvider";
+
 export default function RootLayout({
   children,
 }: {
@@ -35,10 +37,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${inter.variable} h-full antialiased dark`}
+      className={`${roboto.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#06080F] text-[#F8FAFC]">
-        {children}
+      <body className="min-h-full flex flex-col bg-[#FAFAF8] text-[#111827]">
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );

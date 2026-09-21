@@ -26,7 +26,7 @@ export const INITIAL_CHARITIES: Charity[] = [
     tagline: 'Rehabilitation, community, and mental wellness for military veterans.',
     description: 'Veterans On The Green utilizes adaptive golf training and peer-to-peer camaraderie to assist wounded veterans in physical recovery and combat PTSD, fostering purpose and lifelong support networks.',
     logo_url: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=150&auto=format&fit=crop&q=80',
-    cover_image_url: 'https://images.unsplash.com/photo-1593111774642-a1551065792c?w=1200&auto=format&fit=crop&q=80',
+    cover_image_url: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=1200&auto=format&fit=crop&q=80',
     featured: false,
     total_raised: 94200.00,
     events: [
@@ -55,7 +55,7 @@ export const INITIAL_CHARITIES: Charity[] = [
     slug: 'adaptive-sports-sanctuary',
     tagline: 'Empowering para-athletes with adaptive golf and sports technology.',
     description: 'Providing specialized mobility carts, prosthetic sports adaptations, and national tournaments so athletes of all abilities can compete at peak performance levels.',
-    logo_url: 'https://images.unsplash.com/photo-1519766304817-4f37bda74a29?w=150&auto=format&fit=crop&q=80',
+    logo_url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=150&auto=format&fit=crop&q=80',
     cover_image_url: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&auto=format&fit=crop&q=80',
     featured: false,
     total_raised: 81350.00,

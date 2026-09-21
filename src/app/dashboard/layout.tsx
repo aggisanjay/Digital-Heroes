@@ -7,7 +7,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#06080F] flex flex-col lg:flex-row text-white">
+    <div className="min-h-screen bg-[#FAFAF8] flex flex-col lg:flex-row text-[#111827]">
       {/* Persistent Left Navigation Sidebar */}
       <DashboardSidebar />
 

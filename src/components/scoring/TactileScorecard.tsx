@@ -181,18 +181,18 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
   return (
     <div className="space-y-8">
       {isLapsed ? (
-        <div className="glass-panel-elevated rounded-3xl p-8 sm:p-12 border border-rose-500/30 text-center space-y-4 relative overflow-hidden">
-          <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-rose-200 text-center space-y-4 relative overflow-hidden shadow-sm">
+          <div className="w-14 h-14 rounded-2xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-600 mx-auto">
             <Lock className="w-7 h-7" />
           </div>
-          <h3 className="text-2xl font-extrabold text-white">Score Entry Locked</h3>
-          <p className="text-xs sm:text-sm text-[#94A3B8] max-w-lg mx-auto leading-relaxed">
-            Your membership is currently <span className="text-rose-400 font-mono font-bold uppercase">{currentUser?.subscription_status}</span>. Real-time server validation requires an active subscription to log scores and participate in monthly jackpot draws.
+          <h3 className="text-2xl font-extrabold text-[#111827]">Score Entry Locked</h3>
+          <p className="text-xs sm:text-sm text-gray-600 max-w-lg mx-auto leading-relaxed">
+            Your membership is currently <span className="text-rose-600 font-mono font-bold uppercase">{currentUser?.subscription_status}</span>. Real-time server validation requires an active subscription to log scores and participate in monthly jackpot draws.
           </p>
           <div className="pt-2">
             <Link
               href="/subscribe"
-              className="px-8 py-3.5 rounded-xl btn-primary text-xs font-bold inline-flex items-center gap-2 shadow-xl shadow-[#00F29D]/20"
+              className="px-8 py-3.5 rounded-full bg-[#11382B] hover:bg-[#0c281f] text-white text-xs font-bold inline-flex items-center gap-2 shadow-sm"
             >
               <span>Reactivate Subscription Now ($19/mo)</span>
               <ArrowRight className="w-4 h-4" />
@@ -201,29 +201,29 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
         </div>
       ) : (
         /* Entry Form Terminal */
-        <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/10 relative overflow-hidden">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-sm relative overflow-hidden">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-[#00F29D]" />
+              <h3 className="text-xl sm:text-2xl font-extrabold text-[#111827] flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-[#00D284]" />
                 {editingScoreId ? 'Edit Stableford Round' : 'Log Stableford Round'}
               </h3>
-              <p className="text-xs sm:text-sm text-[#94A3B8] mt-1">
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
                 Your last 5 scores determine your monthly algorithmic draw odds & handicap.
               </p>
             </div>
 
             {/* Slots indicator */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10">
-              <span className="text-xs text-[#94A3B8]">Active Window:</span>
-              <span className="text-xs font-mono font-bold text-[#00F29D]">{scores.length} / 5</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200">
+              <span className="text-xs text-gray-500">Active Window:</span>
+              <span className="text-xs font-mono font-bold text-[#11382B]">{scores.length} / 5</span>
             </div>
           </div>
 
         {/* 6th Score Auto-Eviction Alert */}
         {!editingScoreId && scores.length >= 5 && (
-          <div className="mb-6 p-3.5 rounded-xl bg-[#FF6E40]/10 border border-[#FF6E40]/30 flex items-start gap-3 text-xs text-[#FF6E40]">
-            <Info className="w-4 h-4 mt-0.5 shrink-0" />
+          <div className="mb-6 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-xs text-amber-900">
+            <Info className="w-4 h-4 mt-0.5 shrink-0 text-amber-600" />
             <div>
               <span className="font-bold">Rolling 5 Window Active:</span> Adding a new score will auto-evict your oldest recorded score from{' '}
               <span className="font-mono underline">{oldestScore?.date}</span> ({oldestScore?.score} pts).
@@ -233,15 +233,15 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
 
         {/* Duplicate Date Warning with Quick Fix */}
         {conflictingScore && (
-          <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3 text-xs text-amber-300">
+          <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between gap-3 text-xs text-rose-800">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
               <span>{errorMessage}</span>
             </div>
             <button
               type="button"
               onClick={() => handleEditClick(conflictingScore)}
-              className="px-3 py-1 rounded-lg bg-amber-400 text-black font-bold hover:bg-amber-300 transition-colors"
+              className="px-3.5 py-1 rounded-full bg-rose-600 text-white font-bold hover:bg-rose-700 transition-colors"
             >
               Edit That Round
             </button>
@@ -250,14 +250,14 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Tactile Score Value Stepper / Slider */}
-          <div className="p-6 rounded-2xl bg-[#06080F]/70 border border-white/10">
+          <div className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200/80">
             <div className="flex items-center justify-between mb-4">
-              <label className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">
+              <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
                 Stableford Points (1 – 45)
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-3xl font-black text-white font-mono">{scoreVal}</span>
-                <span className="text-xs text-[#00F29D] font-bold">PTS</span>
+                <span className="text-3xl font-black text-[#111827] font-mono">{scoreVal}</span>
+                <span className="text-xs text-[#00D284] font-bold">PTS</span>
               </div>
             </div>
 
@@ -268,10 +268,10 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
               max={45}
               value={scoreVal}
               onChange={e => setScoreVal(Number(e.target.value))}
-              className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#00F29D]"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#11382B]"
             />
 
-            <div className="flex justify-between text-[11px] text-[#64748B] mt-2">
+            <div className="flex justify-between text-[11px] text-gray-500 mt-2">
               <span>1 (Min)</span>
               <span>18 (Bogey Round)</span>
               <span>36 (Par Round)</span>
@@ -279,16 +279,16 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
             </div>
 
             {/* Quick Adjustment Pills */}
-            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
+            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200/60">
               {[28, 32, 36, 38, 40, 42].map(val => (
                 <button
                   key={val}
                   type="button"
                   onClick={() => setScoreVal(val)}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono font-bold border transition-all ${
+                  className={`px-3.5 py-1 rounded-full text-xs font-mono font-bold border transition-all ${
                     scoreVal === val
-                      ? 'bg-[#00F29D]/20 border-[#00F29D] text-[#00F29D]'
-                      : 'bg-white/5 border-white/10 text-[#94A3B8] hover:text-white'
+                      ? 'bg-[#11382B] border-[#11382B] text-white shadow-sm'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-400'
                   }`}
                 >
                   {val} pts
@@ -300,7 +300,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
           {/* Date and Course Input */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
                 Round Date (One per date)
               </label>
               <div className="relative">
@@ -309,7 +309,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                   required
                   value={dateVal}
                   onChange={e => setDateVal(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#06080F]/70 border border-white/10 text-white text-sm focus:outline-none focus:border-[#00F29D] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-[#111827] text-sm focus:outline-none focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-colors"
                 />
               </div>
               {/* Date quick links */}
@@ -317,11 +317,11 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                 <button
                   type="button"
                   onClick={() => setDateVal(new Date().toISOString().substring(0, 10))}
-                  className="text-[11px] text-[#00F29D] hover:underline"
+                  className="text-[11px] text-[#11382B] font-semibold hover:underline"
                 >
                   Today
                 </button>
-                <span className="text-[#64748B]">•</span>
+                <span className="text-gray-300">•</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -329,7 +329,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                     d.setDate(d.getDate() - 1);
                     setDateVal(d.toISOString().substring(0, 10));
                   }}
-                  className="text-[11px] text-[#94A3B8] hover:underline"
+                  className="text-[11px] text-gray-500 hover:underline"
                 >
                   Yesterday
                 </button>
@@ -337,7 +337,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
                 Golf Course / Club Name
               </label>
               <input
@@ -345,7 +345,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                 placeholder="e.g. Pinehurst No. 2"
                 value={courseVal}
                 onChange={e => setCourseVal(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-[#06080F]/70 border border-white/10 text-white text-sm focus:outline-none focus:border-[#00F29D] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-[#111827] text-sm focus:outline-none focus:border-[#11382B] focus:ring-1 focus:ring-[#11382B] transition-colors"
               />
             </div>
           </div>
@@ -355,10 +355,10 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
             <button
               type="submit"
               disabled={Boolean(conflictingScore) || isSubmitting}
-              className={`flex-1 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                 conflictingScore || isSubmitting
-                  ? 'bg-white/10 text-white/40 cursor-not-allowed'
-                  : 'btn-primary'
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-[#11382B] hover:bg-[#0c281f] text-white shadow-sm'
               }`}
             >
               {isSubmitting ? (
@@ -383,7 +383,7 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="px-6 py-4 rounded-xl glass-panel text-sm font-semibold text-[#94A3B8] hover:text-white"
+                className="px-6 py-3.5 rounded-full bg-gray-100 hover:bg-gray-200 text-sm font-semibold text-gray-700 transition-colors"
               >
                 Cancel
               </button>
@@ -391,8 +391,8 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
           </div>
 
           {successMessage && (
-            <div className="p-3.5 rounded-xl bg-[#00F29D]/10 border border-[#00F29D]/30 text-xs text-[#00F29D] flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <div className="p-3.5 rounded-2xl bg-[#00D284]/15 border border-[#00D284]/30 text-xs text-[#11382B] font-semibold flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-[#00D284]" />
               <span>{successMessage}</span>
             </div>
           )}
@@ -403,13 +403,13 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
       {/* Active Rolling 5 Scores Presentation */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-lg font-bold text-white flex items-center gap-2">
-            <History className="w-4 h-4 text-[#00F29D]" />
+          <h4 className="text-lg font-bold text-[#111827] flex items-center gap-2">
+            <History className="w-4 h-4 text-[#00D284]" />
             Active Rolling 5 Scores
-            <span className="text-xs text-[#64748B] font-normal">(Reverse Chronological)</span>
+            <span className="text-xs text-gray-500 font-normal">(Reverse Chronological)</span>
           </h4>
-          <span className="text-xs text-[#94A3B8]">
-            Avg: <strong className="text-white font-mono">
+          <span className="text-xs text-gray-600">
+            Avg: <strong className="text-[#111827] font-mono">
               {scores.length > 0
                 ? (scores.reduce((a, b) => a + b.score, 0) / scores.length).toFixed(1)
                 : 0}
@@ -418,10 +418,10 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
         </div>
 
         {scores.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl glass-panel border border-white/10">
-            <Trophy className="w-12 h-12 text-[#64748B] mx-auto mb-3 opacity-50" />
-            <p className="text-base font-semibold text-white">No Scores Logged Yet</p>
-            <p className="text-xs text-[#94A3B8] mt-1">
+          <div className="p-12 text-center rounded-3xl bg-white border border-gray-200/80 shadow-sm">
+            <Trophy className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-base font-semibold text-[#111827]">No Scores Logged Yet</p>
+            <p className="text-xs text-gray-500 mt-1">
               Log your first round above to generate your entry ticket numbers for the monthly jackpot draw!
             </p>
           </div>
@@ -435,31 +435,31 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className={`glass-panel rounded-2xl p-4 relative flex flex-col justify-between border transition-all ${
+                  className={`bg-white rounded-2xl p-4 relative flex flex-col justify-between border transition-all shadow-sm ${
                     index === 0
-                      ? 'border-[#00F29D]/40 bg-[#00F29D]/5 shadow-lg shadow-[#00F29D]/5'
+                      ? 'border-[#00D284] ring-1 ring-[#00D284]/30'
                       : index === 4
-                      ? 'border-white/10 opacity-75'
-                      : 'border-white/10'
+                      ? 'border-gray-200 opacity-80'
+                      : 'border-gray-200'
                   }`}
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/5 text-[#94A3B8]">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
                         #{index + 1} {index === 0 && '• LATEST'}
                         {index === 4 && '• OLDEST'}
                       </span>
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleEditClick(sc)}
-                          className="text-white/40 hover:text-white transition-colors"
+                          className="text-gray-400 hover:text-gray-700 transition-colors p-1"
                           title="Edit score"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(sc.id)}
-                          className="text-white/40 hover:text-rose-400 transition-colors"
+                          className="text-gray-400 hover:text-rose-600 transition-colors p-1"
                           title="Delete score"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -467,18 +467,18 @@ export default function TactileScorecard({ userId, onScoresChange }: Props) {
                       </div>
                     </div>
 
-                    <div className="text-3xl font-black text-white font-mono my-2">
+                    <div className="text-3xl font-black text-[#111827] font-mono my-2">
                       {sc.score}
                     </div>
 
-                    <p className="text-xs font-semibold text-slate-300 truncate">
+                    <p className="text-xs font-semibold text-gray-800 truncate">
                       {sc.course_name || 'Home Course'}
                     </p>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-[#64748B]">
+                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
                     <span>{sc.date}</span>
-                    <span className="text-[#00F29D] font-mono text-[10px]">Verified</span>
+                    <span className="text-[#00D284] font-semibold text-[10px]">Verified</span>
                   </div>
                 </motion.div>
               ))}

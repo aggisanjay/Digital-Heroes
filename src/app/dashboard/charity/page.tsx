@@ -80,25 +80,25 @@ export default function DashboardCharityPage() {
   return (
     <div className="space-y-6 max-w-4xl animate-in fade-in duration-200">
       <div>
-        <h1 className="text-2xl font-black text-white flex items-center gap-2.5">
-          <Heart className="w-6 h-6 text-[#FF6E40] fill-[#FF6E40]" />
+        <h1 className="text-2xl font-black text-[#111827] flex items-center gap-2.5">
+          <Heart className="w-6 h-6 text-[#E25B37] fill-[#E25B37]" />
           <span>Charity Passthrough & Impact</span>
         </h1>
-        <p className="text-xs text-[#94A3B8] mt-1">
+        <p className="text-xs text-gray-500 mt-1">
           Every month, a percentage of your subscription is pledged directly to your designated partner cause.
         </p>
       </div>
 
       {/* Allocation Slider Card */}
-      <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-sm space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-white">Your Pledge Allocation</h3>
-            <p className="text-xs text-[#94A3B8]">
+            <h3 className="text-base font-bold text-[#111827]">Your Pledge Allocation</h3>
+            <p className="text-xs text-gray-500">
               Guaranteed 100% passthrough of selected percentage to the charity
             </p>
           </div>
-          <span className="font-mono font-black text-3xl text-[#FF6E40]">{charityPct}%</span>
+          <span className="font-mono font-black text-3xl text-[#E25B37]">{charityPct}%</span>
         </div>
 
         <div className="space-y-3">
@@ -109,9 +109,9 @@ export default function DashboardCharityPage() {
             step="5"
             value={charityPct}
             onChange={e => setCharityPct(Number(e.target.value))}
-            className="w-full h-2.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#FF6E40]"
+            className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#E25B37]"
           />
-          <div className="flex justify-between text-[11px] font-mono text-[#64748B]">
+          <div className="flex justify-between text-[11px] font-mono text-gray-500">
             <span>10% (Platform Minimum)</span>
             <span>25%</span>
             <span>50% (Champion Purpose)</span>
@@ -122,12 +122,12 @@ export default function DashboardCharityPage() {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF6E40] to-amber-500 text-black font-extrabold text-xs shadow-lg shadow-[#FF6E40]/20 hover:opacity-95 transition-opacity disabled:opacity-50"
+            className="px-6 py-3 rounded-full bg-[#11382B] hover:bg-[#0c281f] text-white font-bold text-xs shadow-sm transition-colors disabled:opacity-50"
           >
             {isSaving ? 'Saving Changes...' : 'Save Allocation Preference'}
           </button>
           {savedSuccess && (
-            <span className="text-xs text-[#00F29D] font-bold flex items-center gap-1.5 animate-in fade-in">
+            <span className="text-xs text-[#00D284] font-bold flex items-center gap-1.5 animate-in fade-in">
               <CheckCircle2 className="w-4 h-4" /> Preference Saved to Database!
             </span>
           )}
@@ -136,7 +136,7 @@ export default function DashboardCharityPage() {
 
       {/* Select Charity Partner */}
       <div className="space-y-4">
-        <h3 className="text-base font-bold text-white">Choose Your Designated Charity</h3>
+        <h3 className="text-base font-bold text-[#111827]">Choose Your Designated Charity</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {charities.map((c) => {
             const isSelected = c.id === selectedCharityId;
@@ -147,34 +147,34 @@ export default function DashboardCharityPage() {
                 onClick={() => setSelectedCharityId(c.id)}
                 className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-[#FF6E40]/10 border-[#FF6E40] shadow-lg shadow-[#FF6E40]/10 ring-1 ring-[#FF6E40]'
-                    : 'bg-white/5 border-white/10 hover:border-white/20'
+                    ? 'bg-[#E25B37]/5 border-[#E25B37] shadow-sm ring-1 ring-[#E25B37]'
+                    : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm'
                 }`}
               >
                 <div className="flex items-start gap-4">
                   <img
                     src={c.logo_url || ''}
                     alt={c.name}
-                    className="w-12 h-12 rounded-xl object-cover border border-white/10 shrink-0"
+                    className="w-12 h-12 rounded-xl object-cover border border-gray-200 shrink-0"
                   />
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-white text-sm">{c.name}</h4>
+                      <h4 className="font-bold text-[#111827] text-sm">{c.name}</h4>
                       {isSelected && (
-                        <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-[#FF6E40] text-black">
+                        <span className="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase bg-[#E25B37] text-white">
                           Selected
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-[#94A3B8] mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
                       {c.tagline || c.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-                  <span className="text-[#94A3B8]">Total Platform Raised:</span>
-                  <span className="font-mono font-bold text-[#FF6E40]">
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                  <span className="text-gray-500">Total Platform Raised:</span>
+                  <span className="font-mono font-bold text-[#E25B37]">
                     ${Number(c.total_raised).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>

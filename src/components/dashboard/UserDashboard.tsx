@@ -164,28 +164,28 @@ export default function UserDashboard() {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#06080F] flex flex-col items-center justify-center text-white px-4">
-        <div className="glass-panel-elevated rounded-3xl p-8 sm:p-12 border border-white/10 text-center space-y-6 max-w-md w-full animate-in fade-in duration-300">
-          <div className="w-16 h-16 rounded-2xl bg-[#00F29D]/10 border border-[#00F29D]/30 flex items-center justify-center text-[#00F29D] mx-auto">
+      <div className="min-h-screen bg-[#FAFAF8] flex flex-col items-center justify-center text-[#111827] px-4">
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-gray-200 shadow-xl text-center space-y-6 max-w-md w-full animate-in fade-in duration-300">
+          <div className="w-16 h-16 rounded-full bg-[#11382B]/10 flex items-center justify-center text-[#11382B] mx-auto">
             <ShieldCheck className="w-8 h-8" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-white tracking-tight">Member Sign In Required</h2>
-            <p className="text-xs text-[#94A3B8] mt-2 leading-relaxed">
+            <h2 className="text-2xl font-black text-[#111827] tracking-tight">Member Sign In Required</h2>
+            <p className="text-xs text-gray-600 mt-2 leading-relaxed">
               Please sign in to your Digital Heroes account or register to access your personal golf scorecard, draw tickets, and charity impact.
             </p>
           </div>
           <div className="flex flex-col gap-3 pt-2">
             <Link
               href="/login?redirect=/dashboard"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#00F29D] to-[#00D2FF] text-[#06080F] font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-95 transition-opacity"
+              className="w-full py-3.5 rounded-full bg-[#11382B] hover:bg-[#0c281e] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm"
             >
               <span>Sign In to Your Account</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/register"
-              className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors border border-white/10"
+              className="w-full py-3.5 rounded-full bg-white hover:bg-gray-50 text-gray-700 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors border border-gray-300"
             >
               <span>Create New Account</span>
             </Link>
@@ -202,7 +202,7 @@ export default function UserDashboard() {
     : 'lapsed';
 
   return (
-    <div className="min-h-screen bg-[#06080F] text-[#F8FAFC] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAFAF8] text-[#111827] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* 1. Payment Confirmation Toast */}

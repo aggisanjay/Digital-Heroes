@@ -102,22 +102,28 @@ export default function AdminCharitiesPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Toast Feedback */}
+    <div className="space-y-6 animate-in fade-in duration-200">
+      {/* Toast */}
       {toast && (
-        <div className="p-4 rounded-2xl bg-[#00F29D]/10 border border-[#00F29D]/30 text-xs text-[#00F29D] font-bold flex items-center gap-2 animate-in fade-in duration-200">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span>{toast}</span>
+        <div className="p-4 rounded-2xl bg-[#00D284]/15 border border-[#00D284]/40 text-[#11382B] text-xs font-semibold flex items-center justify-between gap-3 shadow-sm animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#00D284]" />
+            <span>{toast}</span>
+          </div>
+          <button onClick={() => setToast(null)} className="text-gray-500 hover:text-gray-700 text-xs font-bold">
+            Dismiss
+          </button>
         </div>
       )}
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Heart className="w-6 h-6 text-[#FF6E40]" /> Partner Charity CMS
+          <h1 className="text-2xl font-black text-[#111827] flex items-center gap-2.5">
+            <Heart className="w-6 h-6 text-[#E25B37] fill-[#E25B37]" />
+            <span>Charities Content Management</span>
           </h1>
-          <p className="text-xs text-[#94A3B8] mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Manage supported charitable causes, edit organization profiles and banners, and monitor disbursements.
           </p>
         </div>
@@ -125,10 +131,10 @@ export default function AdminCharitiesPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={loadCharities}
-            className="p-2 rounded-xl glass-panel text-slate-400 hover:text-white"
+            className="p-2 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-gray-900 shadow-xs"
             title="Refresh charities"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[#00D284] ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={() => {
@@ -144,9 +150,9 @@ export default function AdminCharitiesPage() {
                 featured: false,
               });
             }}
-            className="px-4 py-2 rounded-xl btn-charity text-xs font-bold flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-full bg-[#11382B] hover:bg-[#0c281f] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
           >
-            <Plus className="w-4 h-4" /> Add Partner Charity
+            <Plus className="w-4 h-4 text-[#00D284]" /> Add Partner Charity
           </button>
         </div>
       </div>
@@ -154,14 +160,14 @@ export default function AdminCharitiesPage() {
       {/* Charity Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {charities.length === 0 && !loading ? (
-          <div className="col-span-2 p-12 text-center text-xs text-[#64748B] glass-panel rounded-3xl">
+          <div className="col-span-2 p-12 text-center text-xs text-gray-400 bg-white rounded-3xl border border-gray-200 shadow-sm">
             No partner charities found. Click &quot;Add Partner Charity&quot; to establish your first supported cause.
           </div>
         ) : (
           charities.map(c => (
             <div
               key={c.id}
-              className="glass-panel-elevated rounded-3xl p-6 border border-white/10 flex flex-col justify-between"
+              className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-sm flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
@@ -169,33 +175,33 @@ export default function AdminCharitiesPage() {
                     <img
                       src={c.logo_url || 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=150&auto=format&fit=crop&q=80'}
                       alt={c.name}
-                      className="w-12 h-12 rounded-2xl object-cover border border-white/10 bg-black/40"
+                      className="w-12 h-12 rounded-2xl object-cover border border-gray-200 bg-gray-100"
                     />
                     <div>
-                      <h4 className="text-base font-bold text-white">{c.name}</h4>
-                      <p className="text-xs text-[#FF6E40]">{c.tagline}</p>
+                      <h4 className="text-base font-bold text-[#111827]">{c.name}</h4>
+                      <p className="text-xs text-[#E25B37] font-semibold">{c.tagline}</p>
                     </div>
                   </div>
                   {c.featured && (
-                    <span className="px-2 py-0.5 rounded bg-[#FF6E40]/20 text-[#FF6E40] text-[10px] font-bold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#E25B37]/10 text-[#E25B37] text-[10px] font-bold border border-[#E25B37]/30">
                       Featured
                     </span>
                   )}
                 </div>
 
-                <p className="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
+                <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
                   {c.description}
                 </p>
 
-                <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between text-xs">
-                  <span className="text-[#94A3B8]">Total Raised & Allocated:</span>
-                  <span className="font-mono font-bold text-white">
+                <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between text-xs">
+                  <span className="text-gray-500">Total Raised & Allocated:</span>
+                  <span className="font-mono font-bold text-[#111827]">
                     ${Number(c.total_raised || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
@@ -211,13 +217,13 @@ export default function AdminCharitiesPage() {
                         featured: Boolean(c.featured),
                       });
                     }}
-                    className="px-3 py-1.5 rounded-lg glass-panel text-xs text-[#00F29D] font-semibold hover:border-white/30"
+                    className="px-3.5 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-xs text-[#111827] font-semibold transition-colors"
                   >
                     Edit Details
                   </button>
                   <button
                     onClick={() => handleDeleteCharity(c.id)}
-                    className="px-3 py-1.5 rounded-lg glass-panel text-xs text-rose-400 font-semibold hover:border-rose-400/30"
+                    className="px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-xs text-rose-700 font-semibold border border-rose-200 transition-colors"
                   >
                     Delete
                   </button>
@@ -225,7 +231,7 @@ export default function AdminCharitiesPage() {
 
                 <Link
                   href={`/charities/${c.slug}`}
-                  className="text-xs text-[#94A3B8] hover:text-white flex items-center gap-1"
+                  className="text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1 font-medium"
                 >
                   <span>Public Profile</span>
                   <ArrowRight className="w-3 h-3" />
@@ -238,10 +244,10 @@ export default function AdminCharitiesPage() {
 
       {/* Edit / Add Charity Modal */}
       {(editingCharity || isNewCharity) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-white/10 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-gray-200 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+              <h3 className="text-xl font-bold text-[#111827]">
                 {isNewCharity ? 'Create New Partner Charity' : 'Edit Partner Charity'}
               </h3>
               <button
@@ -249,7 +255,7 @@ export default function AdminCharitiesPage() {
                   setEditingCharity(null);
                   setIsNewCharity(false);
                 }}
-                className="text-[#94A3B8] hover:text-white text-lg"
+                className="text-gray-400 hover:text-gray-700 text-lg rounded-full p-1"
               >
                 ✕
               </button>
@@ -257,51 +263,51 @@ export default function AdminCharitiesPage() {
 
             <form onSubmit={handleSaveCharity} className="space-y-4">
               <div>
-                <label className="block text-xs text-[#94A3B8] mb-1 font-bold">Organization Name</label>
+                <label className="block text-xs text-gray-700 mb-1 font-bold">Organization Name</label>
                 <input
                   type="text"
                   required
                   value={charityForm.name}
                   onChange={e => setCharityForm({ ...charityForm, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#FF6E40]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#111827] text-xs focus:outline-none focus:border-[#11382B]"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#94A3B8] mb-1 font-bold">Short Tagline</label>
+                <label className="block text-xs text-gray-700 mb-1 font-bold">Short Tagline</label>
                 <input
                   type="text"
                   value={charityForm.tagline}
                   onChange={e => setCharityForm({ ...charityForm, tagline: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#FF6E40]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#111827] text-xs focus:outline-none focus:border-[#11382B]"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#94A3B8] mb-1 font-bold">Description</label>
+                <label className="block text-xs text-gray-700 mb-1 font-bold">Description</label>
                 <textarea
                   required
                   rows={3}
                   value={charityForm.description}
                   onChange={e => setCharityForm({ ...charityForm, description: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#FF6E40]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#111827] text-xs focus:outline-none focus:border-[#11382B]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#94A3B8] mb-1 font-bold">Logo URL</label>
+                  <label className="block text-xs text-gray-700 mb-1 font-bold">Logo URL</label>
                   <input
                     type="url"
                     value={charityForm.logo_url}
                     onChange={e => setCharityForm({ ...charityForm, logo_url: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#FF6E40]"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#111827] text-xs focus:outline-none focus:border-[#11382B]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[#94A3B8] mb-1 font-bold">Cover Image URL</label>
+                  <label className="block text-xs text-gray-700 mb-1 font-bold">Cover Image URL</label>
                   <input
                     type="url"
                     value={charityForm.cover_image_url}
                     onChange={e => setCharityForm({ ...charityForm, cover_image_url: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#FF6E40]"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#111827] text-xs focus:outline-none focus:border-[#11382B]"
                   />
                 </div>
               </div>
@@ -311,28 +317,28 @@ export default function AdminCharitiesPage() {
                   id="featured"
                   checked={charityForm.featured}
                   onChange={e => setCharityForm({ ...charityForm, featured: e.target.checked })}
-                  className="accent-[#FF6E40] w-4 h-4 rounded"
+                  className="accent-[#11382B] w-4 h-4 rounded"
                 />
-                <label htmlFor="featured" className="text-xs text-white cursor-pointer select-none">
+                <label htmlFor="featured" className="text-xs text-[#111827] cursor-pointer select-none font-medium">
                   Feature on Homepage Spotlight
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => {
                     setEditingCharity(null);
                     setIsNewCharity(false);
                   }}
-                  className="px-4 py-2.5 rounded-xl glass-panel text-xs text-[#94A3B8] hover:text-white"
+                  className="px-5 py-2.5 rounded-full bg-gray-100 text-xs text-gray-700 font-semibold hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl btn-charity text-xs font-bold"
+                  className="px-6 py-2.5 rounded-full bg-[#11382B] hover:bg-[#0c281f] text-white text-xs font-bold shadow-sm transition-colors"
                 >
                   {saving ? 'Saving...' : 'Save Charity'}
                 </button>

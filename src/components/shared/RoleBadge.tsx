@@ -23,34 +23,34 @@ const VARIANTS: Record<RoleVariant, {
 }> = {
   admin: {
     label: 'Admin',
-    bgClass: 'bg-[#FF6E40]/10',
-    borderClass: 'border-[#FF6E40]/30',
-    textClass: 'text-[#FF6E40]',
-    dotClass: 'bg-[#FF6E40]',
+    bgClass: 'bg-[#E25B37]/10',
+    borderClass: 'border-[#E25B37]/30',
+    textClass: 'text-[#E25B37]',
+    dotClass: 'bg-[#E25B37]',
     icon: Shield,
   },
   active: {
     label: 'Subscriber',
-    bgClass: 'bg-[#00F29D]/10',
-    borderClass: 'border-[#00F29D]/30',
-    textClass: 'text-[#00F29D]',
-    dotClass: 'bg-[#00F29D]',
+    bgClass: 'bg-[#00D284]/15',
+    borderClass: 'border-[#00D284]/40',
+    textClass: 'text-[#11382B]',
+    dotClass: 'bg-[#00D284]',
     icon: CheckCircle2,
   },
   lapsed: {
     label: 'Lapsed',
-    bgClass: 'bg-amber-500/10',
-    borderClass: 'border-amber-500/30',
-    textClass: 'text-amber-400',
-    dotClass: 'bg-amber-400',
+    bgClass: 'bg-amber-100',
+    borderClass: 'border-amber-300',
+    textClass: 'text-amber-800',
+    dotClass: 'bg-amber-500',
     icon: AlertTriangle,
   },
   visitor: {
     label: 'Visitor',
-    bgClass: 'bg-white/5',
-    borderClass: 'border-white/10',
-    textClass: 'text-[#94A3B8]',
-    dotClass: 'bg-[#64748B]',
+    bgClass: 'bg-gray-100',
+    borderClass: 'border-gray-200',
+    textClass: 'text-gray-600',
+    dotClass: 'bg-gray-400',
     icon: User,
   },
 };
@@ -67,12 +67,12 @@ export default function RoleBadge({ variant, showLabel = true, size = 'sm' }: Ro
   const Icon = config.icon;
 
   const sizeClasses = size === 'md'
-    ? 'px-3 py-1.5 text-xs gap-2'
-    : 'px-2 py-1 text-[11px] gap-1.5';
+    ? 'px-3 py-1 text-xs gap-1.5'
+    : 'px-2.5 py-0.5 text-[11px] gap-1';
 
   return (
     <span
-      className={`inline-flex items-center rounded-lg border font-bold uppercase tracking-wider ${config.bgClass} ${config.borderClass} ${config.textClass} ${sizeClasses}`}
+      className={`inline-flex items-center rounded-full border font-bold uppercase tracking-wider ${config.bgClass} ${config.borderClass} ${config.textClass} ${sizeClasses}`}
     >
       <Icon className={size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3'} />
       {showLabel && <span>{config.label}</span>}

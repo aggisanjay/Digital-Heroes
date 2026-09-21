@@ -29,14 +29,14 @@ export default function DashboardScoresPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <RefreshCw className="w-6 h-6 text-[#00F29D] animate-spin" />
+        <RefreshCw className="w-6 h-6 text-[#00D284] animate-spin" />
       </div>
     );
   }
 
   if (!userId) {
     return (
-      <div className="p-8 text-center text-[#94A3B8]">
+      <div className="p-8 text-center text-gray-500">
         Please sign in to view and log golf scores.
       </div>
     );
@@ -46,11 +46,11 @@ export default function DashboardScoresPage() {
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2.5">
-            <Target className="w-6 h-6 text-[#00F29D]" />
+          <h1 className="text-2xl font-black text-[#111827] flex items-center gap-2.5">
+            <Target className="w-6 h-6 text-[#00D284]" />
             <span>Tactile Scorecard & Rolling Rounds</span>
           </h1>
-          <p className="text-xs text-[#94A3B8] mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Log your tournament Stableford scores (1–45). Your 5 latest scores automatically form your monthly draw ticket.
           </p>
         </div>

@@ -60,11 +60,11 @@ export default function DashboardDrawsPage() {
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2.5">
-            <Trophy className="w-6 h-6 text-[#00D2FF]" />
+          <h1 className="text-2xl font-black text-[#111827] flex items-center gap-2.5">
+            <Trophy className="w-6 h-6 text-[#00D284]" />
             <span>Jackpot Draws & Prize Claims</span>
           </h1>
-          <p className="text-xs text-[#94A3B8] mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Track your active rolling ticket, claim winning prize disbursements, and inspect published platform draw results.
           </p>
         </div>
@@ -80,38 +80,38 @@ export default function DashboardDrawsPage() {
       />
 
       {/* Platform Monthly Draws Ledger */}
-      <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Award className="w-4 h-4 text-[#00F29D]" />
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-sm space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          <h3 className="text-base font-bold text-[#111827] flex items-center gap-2">
+            <Award className="w-4 h-4 text-[#00D284]" />
             <span>Platform Monthly Draws History</span>
           </h3>
-          <span className="text-xs text-[#94A3B8] font-mono">{draws.length} Draws Logged</span>
+          <span className="text-xs text-gray-500 font-mono">{draws.length} Draws Logged</span>
         </div>
 
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-gray-100">
           {draws.length === 0 ? (
-            <p className="text-xs text-[#64748B] p-4 text-center">No draws published yet.</p>
+            <p className="text-xs text-gray-400 p-4 text-center">No draws published yet.</p>
           ) : (
             draws.map(d => (
               <div key={d.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-white">Period: {d.period}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
-                      d.status === 'published' ? 'bg-[#00F29D]/15 text-[#00F29D]' : 'bg-white/10 text-[#94A3B8]'
+                    <span className="text-sm font-bold text-[#111827]">Period: {d.period}</span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+                      d.status === 'published' ? 'bg-[#00D284]/15 text-[#11382B] border border-[#00D284]/30' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {d.status}
                     </span>
-                    <span className="text-xs text-[#94A3B8]">({d.mode} engine)</span>
+                    <span className="text-xs text-gray-500">({d.mode} engine)</span>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs text-[#94A3B8]">Winning Target Numbers:</span>
-                    <div className="flex gap-1">
+                    <span className="text-xs text-gray-500">Winning Target Numbers:</span>
+                    <div className="flex gap-1.5">
                       {d.target_numbers.map((num, i) => (
                         <span 
                           key={i} 
-                          className="w-6 h-6 rounded-md bg-white/10 text-white font-mono text-xs flex items-center justify-center font-bold"
+                          className="w-7 h-7 rounded-lg bg-gray-100 text-[#111827] font-mono text-xs flex items-center justify-center font-bold border border-gray-200"
                         >
                           {num}
                         </span>
@@ -121,10 +121,10 @@ export default function DashboardDrawsPage() {
                 </div>
 
                 <div className="text-left sm:text-right font-mono">
-                  <div className="text-base font-bold text-white">
+                  <div className="text-base font-bold text-[#111827]">
                     ${Number(d.pool_total).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[11px] text-amber-400">
+                  <div className="text-[11px] text-amber-600 font-medium">
                     Rollover Out: ${Number(d.jackpot_rollover_out).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
                 </div>

@@ -4,24 +4,21 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
-  Sparkles, 
-  User, 
   ChevronDown, 
   ArrowRight, 
-  CheckCircle2, 
   LogOut, 
   LogIn, 
   LayoutDashboard, 
   ShieldAlert, 
   Menu, 
   X,
-  Compass,
-  FileSpreadsheet
+  Sparkles
 } from 'lucide-react';
 import { store } from '@/lib/data/mock-db';
 import { Profile } from '@/lib/types';
 import RoleBadge from '@/components/shared/RoleBadge';
 import { eventBus } from '@/lib/events';
+import Pill from '@/components/ui/Pill';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -52,7 +49,6 @@ export default function Navbar() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    // Listen to user switched events
     const unsub = eventBus.on('user:switched', () => {
       refreshUser();
     });
@@ -62,21 +58,6 @@ export default function Navbar() {
       unsub();
     };
   }, []);
-
-  const handleRoleSwitch = (userId: string) => {
-    store.setCurrentUser(userId);
-    refreshUser();
-    setShowUserDropdown(false);
-    setMobileMenuOpen(false);
-    
-    // Smooth redirect based on role
-    const updated = store.getCurrentUser();
-    if (updated?.role === 'admin') {
-      router.push('/admin');
-    } else {
-      router.push('/dashboard');
-    }
-  };
 
   const handleLogout = async () => {
     try {
@@ -95,106 +76,103 @@ export default function Navbar() {
     ? 'active' 
     : currentUser ? 'lapsed' : 'visitor';
 
+  // Do not render floating public navbar on interior dashboard / admin pages (they have their own sidebars)
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#06080F]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-3'
-          : 'bg-transparent py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-4 sm:top-6 left-0 right-0 z-50 px-4 pointer-events-none flex justify-center">
+      <div
+        className={`pointer-events-auto w-full max-w-5xl rounded-full transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur-2xl border border-black/10 shadow-xl shadow-black/5 py-2.5 px-5'
+            : 'bg-white/80 backdrop-blur-xl border border-black/8 shadow-md shadow-black/[0.03] py-3 px-6'
+        }`}
+      >
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00F29D] via-[#00D2FF] to-[#FF6E40] p-[2px] shadow-lg shadow-[#00F29D]/20 group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-[#06080F] rounded-[10px] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-[#00F29D] group-hover:rotate-12 transition-transform duration-300" />
-              </div>
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+            <div className="w-9 h-9 rounded-full bg-[#11382B]/5 border border-[#11382B]/15 flex items-center justify-center p-1 group-hover:scale-105 transition-transform duration-200">
+              <img
+                src="/logo-icon.png"
+                alt="Digital Heroes Mascot"
+                className="w-full h-full object-contain filter drop-shadow-sm"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-xl tracking-tight text-white flex items-center gap-1.5">
-                DIGITAL<span className="text-[#00F29D]">HEROES</span>
+              <span className="font-extrabold text-base tracking-tight text-gray-900 leading-none">
+                DIGITAL<span className="text-[#11382B]">HEROES</span>
               </span>
-              <span className="text-[10px] tracking-widest text-[#94A3B8] font-medium uppercase -mt-1">
-                Performance • Prize • Purpose
+              <span className="text-[9px] tracking-wider text-gray-500 font-semibold uppercase mt-0.5">
+                Golf • Prize • Charity
               </span>
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-7">
+          {/* Desktop Nav Links (Center Pills) */}
+          <nav className="hidden md:flex items-center gap-1 bg-gray-100/70 p-1 rounded-full border border-gray-200/50">
             <Link
               href="/charities"
-              className={`text-sm font-medium transition-colors hover:text-[#00F29D] ${
-                pathname === '/charities' ? 'text-[#00F29D]' : 'text-[#94A3B8]'
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                pathname === '/charities'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Charities
             </Link>
             <Link
               href="/how-it-works"
-              className={`text-sm font-medium transition-colors hover:text-[#00F29D] ${
-                pathname === '/how-it-works' ? 'text-[#00F29D]' : 'text-[#94A3B8]'
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                pathname === '/how-it-works'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               How It Works
             </Link>
             <Link
-              href="/dashboard"
-              className={`text-sm font-medium transition-colors hover:text-[#00F29D] ${
-                pathname.startsWith('/dashboard') ? 'text-[#00F29D]' : 'text-[#94A3B8]'
+              href="/subscribe"
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                pathname === '/subscribe'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              Dashboard
+              Membership
             </Link>
-            {currentUser?.role === 'admin' && (
-              <Link
-                href="/admin"
-                className={`text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#FF6E40]/10 border border-[#FF6E40]/30 text-[#FF6E40] transition-colors hover:bg-[#FF6E40]/20 flex items-center gap-1.5 ${
-                  pathname.startsWith('/admin') ? 'ring-1 ring-[#FF6E40]' : ''
-                }`}
-              >
-                <ShieldAlert className="w-3.5 h-3.5" />
-                Admin Panel
-              </Link>
-            )}
           </nav>
 
-          {/* Right Area: Auth & Subscribe CTAs */}
-          <div className="flex items-center gap-3">
-            {/* Authenticated State vs Visitor State */}
+          {/* Right Action Pills */}
+          <div className="flex items-center gap-2">
             {currentUser ? (
               <div className="relative">
                 <button
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 text-xs text-white transition-all"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200/80 border border-gray-200 text-xs font-bold text-gray-900 transition-all"
                 >
                   <RoleBadge variant={roleVariant} size="sm" showLabel={false} />
-                  <span className="font-medium text-xs max-w-[120px] truncate hidden sm:inline">
-                    {currentUser.full_name}
+                  <span className="max-w-[110px] truncate hidden sm:inline">
+                    {currentUser.full_name || currentUser.email}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8]" />
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
                 </button>
 
-                {/* Dropdown Menu */}
                 {showUserDropdown && (
-                  <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-[#0D1322] border border-white/15 shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-3 py-2 border-b border-white/10 mb-2">
-                      <div className="flex items-center justify-between mb-1">
-                        <p className="font-bold text-sm text-white truncate">{currentUser.full_name}</p>
-                        <RoleBadge variant={roleVariant} size="sm" />
-                      </div>
-                      <p className="text-[11px] text-[#94A3B8] truncate">{currentUser.email}</p>
+                  <div className="absolute right-0 mt-2 w-64 rounded-3xl bg-white border border-gray-200 shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="px-3 py-2 border-b border-gray-100 mb-1">
+                      <p className="font-bold text-xs text-gray-900 truncate">{currentUser.full_name}</p>
+                      <p className="text-[10px] text-gray-500 truncate">{currentUser.email}</p>
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-1 pt-1">
                       <Link
                         href="/dashboard"
                         onClick={() => setShowUserDropdown(false)}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-white hover:bg-white/5 transition-colors"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-2xl text-xs font-semibold text-gray-800 hover:bg-gray-50 transition-colors"
                       >
-                        <LayoutDashboard className="w-4 h-4 text-[#00F29D]" />
+                        <LayoutDashboard className="w-4 h-4 text-emerald-700" />
                         <span>Subscriber Dashboard</span>
                       </Link>
 
@@ -202,20 +180,16 @@ export default function Navbar() {
                         <Link
                           href="/admin"
                           onClick={() => setShowUserDropdown(false)}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-[#FF6E40] hover:bg-[#FF6E40]/10 transition-colors"
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-2xl text-xs font-semibold text-amber-800 hover:bg-amber-50 transition-colors"
                         >
-                          <ShieldAlert className="w-4 h-4 text-[#FF6E40]" />
-                          <span>Admin Control Panel</span>
+                          <ShieldAlert className="w-4 h-4 text-amber-600" />
+                          <span>Admin Control Station</span>
                         </Link>
                       )}
-                    </div>
 
-                    {/* Sign Out Action */}
-                    <div className="mt-3 pt-2 border-t border-white/10">
                       <button
-
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-500/10 transition-colors"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Sign Out</span>
@@ -225,110 +199,49 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              /* Visitor: Prominent Login Button */
-              <Link
-                href="/login"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-semibold text-white transition-all"
-              >
-                <LogIn className="w-3.5 h-3.5 text-[#00F29D]" />
-                <span>Sign In</span>
-              </Link>
+              <Pill href="/login" variant="outline" size="sm">
+                Sign In
+              </Pill>
             )}
 
-            {/* Subscribe CTA or Active Member Badge */}
-            {currentUser?.subscription_status === 'active' ? (
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#00F29D]/10 border border-[#00F29D]/30 text-[#00F29D] text-xs font-bold transition-all hover:bg-[#00F29D]/20 hidden sm:inline-flex"
-              >
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Active Member</span>
-              </Link>
-            ) : (
-              <Link
-                href="/subscribe"
-                className="relative group overflow-hidden rounded-xl p-[1px] font-semibold text-xs transition-transform active:scale-95 hidden sm:inline-block"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00F29D] via-[#00D2FF] to-[#FF6E40] rounded-xl animate-pulse opacity-70 group-hover:opacity-100 transition-opacity" />
-                <div className="relative px-3.5 py-2 bg-[#06080F] rounded-[11px] flex items-center gap-1.5 group-hover:bg-[#06080F]/80 transition-colors">
-                  <span className="text-[#00F29D] font-bold">Join the Draw</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#00F29D] group-hover:translate-x-0.5 transition-transform" />
-                </div>
-              </Link>
-            )}
+            <Pill href="/subscribe" variant="primary" size="sm" arrow>
+              Join the Draw
+            </Pill>
 
-
-            {/* Mobile Hamburger Menu Toggle */}
+            {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-[#94A3B8] hover:text-white"
+              className="md:hidden p-2 rounded-full bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-3 pt-3 border-t border-white/10 bg-[#0D1322] rounded-2xl p-4 shadow-2xl space-y-3 animate-in fade-in duration-200">
+          <div className="md:hidden mt-3 pt-3 border-t border-gray-100 space-y-2 pb-1">
             <Link
               href="/charities"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#94A3B8] hover:text-[#00F29D] py-1.5"
+              className="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100"
             >
-              Charity Directory
+              Charities Directory
             </Link>
             <Link
               href="/how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#94A3B8] hover:text-[#00F29D] py-1.5"
+              className="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100"
             >
               How It Works
             </Link>
             <Link
-              href="/dashboard"
+              href="/subscribe"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#94A3B8] hover:text-[#00F29D] py-1.5"
+              className="block px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100"
             >
-              Subscriber Dashboard
+              Membership & Pricing
             </Link>
-            {currentUser?.role === 'admin' && (
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm font-semibold text-[#FF6E40] py-1.5"
-              >
-                Admin Control Panel
-              </Link>
-            )}
-
-            <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
-              {currentUser ? (
-                <button
-                  onClick={handleLogout}
-                  className="w-full py-2.5 px-4 rounded-xl bg-red-500/10 border border-red-500/20 text-xs font-bold text-red-400 flex items-center justify-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out ({currentUser.full_name})</span>
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white/10 text-xs font-bold text-white text-center"
-                >
-                  Sign In to Account
-                </Link>
-              )}
-
-              <Link
-                href="/subscribe"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#00F29D] to-[#00D2FF] text-xs font-bold text-[#06080F] text-center"
-              >
-                Join the Monthly Draw ($10/mo)
-              </Link>
-            </div>
           </div>
         )}
       </div>

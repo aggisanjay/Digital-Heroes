@@ -173,7 +173,7 @@ async function runVerification() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       winnerId: sampleWinner.id,
-      proofUrl: 'https://images.unsplash.com/photo-1593111774642-a1551065792c',
+      proofUrl: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb',
     }),
   });
   assert(proofRes.status === 200, 'Winner proof submission succeeds');

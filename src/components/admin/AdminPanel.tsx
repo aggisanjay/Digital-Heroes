@@ -360,7 +360,7 @@ export default function AdminPanel() {
   const COLORS = ['#00F29D', '#00D2FF', '#FF6E40', '#FFA000'];
 
   return (
-    <div className="min-h-screen bg-[#06080F] text-[#F8FAFC] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAFAF8] text-[#111827] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Admin Header & Surface Navigation */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">

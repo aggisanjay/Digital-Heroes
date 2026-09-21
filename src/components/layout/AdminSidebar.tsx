@@ -57,20 +57,22 @@ export default function AdminSidebar() {
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#080D18] border-r border-white/10 text-white w-64 lg:w-72 select-none">
+    <div className="flex flex-col h-full bg-white border-r border-gray-200/80 text-gray-900 w-64 lg:w-72 select-none shadow-sm">
       {/* 1. Brand & Admin Tag */}
-      <div className="p-6 border-b border-white/10 flex items-center justify-between">
+      <div className="p-5 border-b border-gray-100 flex items-center justify-between">
         <Link href="/admin/draws" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-[#FF6E40] p-[2px] shadow-lg shadow-amber-400/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-[#06080F] rounded-[9px] flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-amber-400" />
-            </div>
+          <div className="w-10 h-10 rounded-2xl bg-[#11382B] p-2 flex items-center justify-center shadow-md shadow-[#11382B]/10 group-hover:scale-105 transition-transform">
+            <img
+              src="/logo-icon.png"
+              alt="Digital Heroes Mascot"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-lg tracking-tight text-white leading-none">
-              DIGITAL<span className="text-amber-400">ADMIN</span>
+            <span className="font-extrabold text-base tracking-tight text-[#111827] leading-none">
+              DIGITAL<span className="text-[#E25B37]">ADMIN</span>
             </span>
-            <span className="text-[10px] text-amber-300 font-bold tracking-widest uppercase mt-0.5">
+            <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mt-0.5">
               Control Station
             </span>
           </div>
@@ -78,7 +80,7 @@ export default function AdminSidebar() {
         {mobileOpen && (
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/5"
+            className="lg:hidden p-2 text-gray-400 hover:text-gray-700 rounded-full hover:bg-gray-100"
           >
             <X className="w-5 h-5" />
           </button>
@@ -86,19 +88,19 @@ export default function AdminSidebar() {
       </div>
 
       {/* 2. Admin Badge Card */}
-      <div className="p-4 m-4 rounded-2xl bg-amber-400/10 border border-amber-400/25 space-y-2">
+      <div className="p-4 m-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
+          <span className="text-[10px] uppercase font-bold tracking-wider text-amber-800">
             System Administrator
           </span>
           <RoleBadge variant="admin" size="sm" />
         </div>
-        <p className="text-xs text-white font-bold truncate">{adminEmail}</p>
-        <p className="text-[10px] text-slate-400">Full platform database & draw sanctions active.</p>
+        <p className="text-xs text-[#111827] font-bold truncate">{adminEmail}</p>
+        <p className="text-[10px] text-gray-500">Full platform database & draw sanctions active.</p>
       </div>
 
       {/* 3. Navigation Links */}
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -107,23 +109,23 @@ export default function AdminSidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-gradient-to-r from-amber-400/20 to-[#FF6E40]/10 text-amber-300 border border-amber-400/30 shadow-lg shadow-amber-400/10'
-                  : 'text-[#94A3B8] hover:text-white hover:bg-white/5 border border-transparent'
+                  ? 'bg-[#11382B] text-white shadow-sm'
+                  : 'text-gray-600 hover:text-[#111827] hover:bg-gray-100 border border-transparent'
               }`}
             >
-              <item.icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+              <item.icon className={`w-4 h-4 ${isActive ? 'text-[#00D284]' : 'text-gray-400'}`} />
               <span>{item.label}</span>
             </Link>
           );
         })}
 
-        <div className="pt-4 mt-4 border-t border-white/10">
+        <div className="pt-3 mt-3 border-t border-gray-100">
           <Link
             href="/dashboard"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#00F29D] bg-[#00F29D]/10 hover:bg-[#00F29D]/20 border border-[#00F29D]/30 transition-colors"
+            className="flex items-center justify-between px-4 py-2.5 rounded-full text-xs font-bold text-[#11382B] bg-[#00D284]/15 hover:bg-[#00D284]/25 border border-[#00D284]/30 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <ArrowLeft className="w-4 h-4" />
@@ -135,10 +137,10 @@ export default function AdminSidebar() {
       </nav>
 
       {/* 4. Sign Out */}
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-gray-100">
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-rose-500/15 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 text-xs font-bold text-[#94A3B8] transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gray-50 hover:bg-rose-50 hover:text-rose-600 border border-gray-200 text-xs font-semibold text-gray-600 transition-colors"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
@@ -150,19 +152,19 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile Top Header */}
-      <div className="lg:hidden sticky top-0 z-40 bg-[#080D18]/90 backdrop-blur-md border-b border-white/10 px-4 py-3 flex items-center justify-between text-white">
+      <div className="lg:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 py-3 flex items-center justify-between text-[#111827]">
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10"
+            className="p-2 rounded-full bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-700"
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-black text-sm tracking-tight text-white">
-            DIGITAL<span className="text-amber-400">ADMIN</span>
+          <span className="font-extrabold text-sm tracking-tight text-[#111827]">
+            DIGITAL<span className="text-[#E25B37]">ADMIN</span>
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300">
+        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
           Administrator
         </span>
       </div>
@@ -175,8 +177,8 @@ export default function AdminSidebar() {
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <div className="relative flex-1 max-w-xs w-full bg-[#080D18] z-10 shadow-2xl animate-in slide-in-from-left duration-200">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs" onClick={() => setMobileOpen(false)} />
+          <div className="relative flex-1 max-w-xs w-full bg-white z-10 shadow-2xl animate-in slide-in-from-left duration-200">
             {sidebarContent}
           </div>
         </div>

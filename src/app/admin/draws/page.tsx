@@ -110,39 +110,38 @@ export default function AdminDrawsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-2.5">
-            <Trophy className="w-7 h-7 text-[#00F29D]" />
-            <span>Draw Room & Prize Simulator</span>
+          <h1 className="text-2xl font-black text-[#111827] flex items-center gap-2.5">
+            <Trophy className="w-6 h-6 text-[#E25B37]" />
+            <span>Draw Engine Simulator & Manager</span>
           </h1>
-          <p className="text-xs text-[#94A3B8] mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Simulate prize tier distributions against real active subscribers and lock in official published draws.
           </p>
         </div>
 
         {actionFeedbackToast && (
-          <div className="px-4 py-2 rounded-xl bg-[#00F29D]/15 border border-[#00F29D]/40 text-[#00F29D] text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" />
+          <div className="px-4 py-2 rounded-full bg-[#00D284]/15 border border-[#00D284]/40 text-[#11382B] text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#00D284]" />
             <span>{actionFeedbackToast}</span>
           </div>
         )}
       </div>
 
       {/* Simulator Control Surface */}
-      <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-sm space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Controls Column */}
           <div className="lg:col-span-5 space-y-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8] flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-[#00F29D]" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#00D284]" />
               <span>Simulation Parameters</span>
             </h3>
 
             {/* Mode Select */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-white uppercase tracking-wider">
+              <label className="text-xs font-bold text-[#111827] uppercase tracking-wider">
                 Target Generation Mode
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -151,12 +150,12 @@ export default function AdminDrawsPage() {
                   onClick={() => setDrawMode('algorithmic')}
                   className={`p-3.5 rounded-2xl border text-xs font-bold transition-all text-left ${
                     drawMode === 'algorithmic'
-                      ? 'bg-[#00F29D]/15 border-[#00F29D] text-[#00F29D] shadow-lg shadow-[#00F29D]/10'
-                      : 'bg-white/5 border-white/10 text-[#94A3B8] hover:text-white'
+                      ? 'bg-[#11382B] border-[#11382B] text-white shadow-sm'
+                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-gray-300'
                   }`}
                 >
-                  <p className="font-extrabold text-white">Algorithmic</p>
-                  <p className="text-[10px] text-[#94A3B8] mt-0.5">Weighted by consistency</p>
+                  <p className={`font-extrabold ${drawMode === 'algorithmic' ? 'text-white' : 'text-[#111827]'}`}>Algorithmic</p>
+                  <p className={`text-[10px] mt-0.5 ${drawMode === 'algorithmic' ? 'text-gray-200' : 'text-gray-500'}`}>Weighted by consistency</p>
                 </button>
 
                 <button
@@ -164,12 +163,12 @@ export default function AdminDrawsPage() {
                   onClick={() => setDrawMode('random')}
                   className={`p-3.5 rounded-2xl border text-xs font-bold transition-all text-left ${
                     drawMode === 'random'
-                      ? 'bg-[#00F29D]/15 border-[#00F29D] text-[#00F29D] shadow-lg shadow-[#00F29D]/10'
-                      : 'bg-white/5 border-white/10 text-[#94A3B8] hover:text-white'
+                      ? 'bg-[#11382B] border-[#11382B] text-white shadow-sm'
+                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-gray-300'
                   }`}
                 >
-                  <p className="font-extrabold text-white">True Random</p>
-                  <p className="text-[10px] text-[#94A3B8] mt-0.5">Uniform lottery RNG</p>
+                  <p className={`font-extrabold ${drawMode === 'random' ? 'text-white' : 'text-[#111827]'}`}>True Random</p>
+                  <p className={`text-[10px] mt-0.5 ${drawMode === 'random' ? 'text-gray-200' : 'text-gray-500'}`}>Uniform lottery RNG</p>
                 </button>
               </div>
             </div>
@@ -177,15 +176,15 @@ export default function AdminDrawsPage() {
             {/* Target Numbers Input */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-white uppercase tracking-wider">
+                <label className="text-xs font-bold text-[#111827] uppercase tracking-wider">
                   Target Numbers (5 unique: 1–45)
                 </label>
                 <button
                   type="button"
                   onClick={handleGenerateRandomTargets}
-                  className="text-xs text-[#00F29D] font-bold hover:underline flex items-center gap-1"
+                  className="text-xs text-[#11382B] font-bold hover:underline flex items-center gap-1"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#00D284]" />
                   <span>Roll Random Targets</span>
                 </button>
               </div>
@@ -203,7 +202,7 @@ export default function AdminDrawsPage() {
                       updated[idx] = Math.max(1, Math.min(45, Number(e.target.value) || 1));
                       setTargetNumbers(updated);
                     }}
-                    className="w-full h-12 rounded-xl bg-white/5 border border-white/10 text-center font-mono font-black text-base text-white focus:outline-none focus:border-[#00F29D]"
+                    className="w-full h-12 rounded-xl bg-gray-50 border border-gray-200 text-center font-mono font-black text-base text-[#111827] focus:outline-none focus:border-[#11382B] focus:bg-white"
                   />
                 ))}
               </div>
@@ -214,16 +213,16 @@ export default function AdminDrawsPage() {
               type="button"
               onClick={handleRunSimulation}
               disabled={isSimulating}
-              className="w-full py-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+              className="w-full py-3.5 rounded-full bg-[#11382B] hover:bg-[#0c281f] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-50"
             >
               {isSimulating ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin text-[#00F29D]" />
+                  <RefreshCw className="w-4 h-4 animate-spin text-[#00D284]" />
                   <span>Simulating Real Subscriber Pool...</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 text-[#00F29D]" />
+                  <Play className="w-4 h-4 text-[#00D284]" />
                   <span>Run Dry-Run Simulation</span>
                 </>
               )}
@@ -231,16 +230,16 @@ export default function AdminDrawsPage() {
           </div>
 
           {/* Simulation Output Column */}
-          <div className="lg:col-span-7 bg-black/40 rounded-2xl p-5 border border-white/10 space-y-4">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">
+          <div className="lg:col-span-7 bg-gray-50/80 rounded-2xl p-5 border border-gray-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">
                 Simulation Projection
               </h3>
               {simulationResult && (
                 <button
                   type="button"
                   onClick={handlePublishDraw}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00F29D] to-[#00D2FF] text-[#06080F] font-black text-xs uppercase tracking-wider shadow-lg shadow-[#00F29D]/20 hover:opacity-95 transition-opacity"
+                  className="px-5 py-2 rounded-full bg-[#00D284] hover:bg-[#00b973] text-[#11382B] font-black text-xs uppercase tracking-wider shadow-sm transition-opacity"
                 >
                   Officially Publish & Lock Draw
                 </button>
@@ -248,8 +247,8 @@ export default function AdminDrawsPage() {
             </div>
 
             {publishSuccess && (
-              <div className="p-4 rounded-xl bg-[#00F29D]/15 border border-[#00F29D]/40 text-[#00F29D] text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <div className="p-4 rounded-2xl bg-[#00D284]/15 border border-[#00D284]/40 text-[#11382B] text-xs font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-[#00D284]" />
                 <span>{publishSuccess}</span>
               </div>
             )}
@@ -257,66 +256,65 @@ export default function AdminDrawsPage() {
             {simulationResult ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                    <span className="text-[10px] text-[#94A3B8] block">Subscribers</span>
-                    <span className="font-mono font-bold text-white text-base">
-                      {simulationResult.activeSubscriberCount}
+                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-xs">
+                    <span className="text-[10px] text-gray-500 uppercase font-bold block">Gross Pool</span>
+                    <span className="font-mono font-black text-sm text-[#111827]">
+                      ${(simulationResult.totalCyclePool ?? 0).toFixed(2)}
                     </span>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                    <span className="text-[10px] text-[#94A3B8] block">Total Cycle Pool</span>
-                    <span className="font-mono font-bold text-[#00F29D] text-base">
-                      ${simulationResult.totalCyclePool.toFixed(2)}
+                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-xs">
+                    <span className="text-[10px] text-gray-500 uppercase font-bold block">Prize Pool (Available)</span>
+                    <span className="font-mono font-black text-sm text-[#111827]">
+                      ${(simulationResult.totalAvailablePoolWithRollover ?? 0).toFixed(2)}
                     </span>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                    <span className="text-[10px] text-[#94A3B8] block">Prizes Distributed</span>
-                    <span className="font-mono font-bold text-white text-base">
-                      ${simulationResult.totalPrizeDistributed.toFixed(2)}
+                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-xs">
+                    <span className="text-[10px] text-gray-500 uppercase font-bold block">Total Winners</span>
+                    <span className="font-mono font-black text-sm text-[#00D284]">
+                      {simulationResult.winners?.length ?? 0}
                     </span>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                    <span className="text-[10px] text-[#94A3B8] block">Next Rollover</span>
-                    <span className="font-mono font-bold text-amber-400 text-base">
-                      ${simulationResult.nextJackpotRolloverOut.toFixed(2)}
+                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-xs">
+                    <span className="text-[10px] text-gray-500 uppercase font-bold block">Rollover Out</span>
+                    <span className="font-mono font-black text-sm text-amber-600">
+                      ${(simulationResult.nextJackpotRolloverOut ?? 0).toFixed(2)}
                     </span>
                   </div>
                 </div>
 
-                {/* Tier Splits */}
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left">
-                    <thead>
-                      <tr className="border-b border-white/10 text-[#94A3B8]">
-                        <th className="py-2">Tier</th>
-                        <th className="py-2">Total Pool</th>
-                        <th className="py-2">Winners</th>
-                        <th className="py-2">Per Winner</th>
+                  <table className="w-full text-xs text-left text-gray-700">
+                    <thead className="text-[10px] uppercase text-gray-500 border-b border-gray-200">
+                      <tr>
+                        <th className="pb-2">Tier</th>
+                        <th className="pb-2">Allocated</th>
+                        <th className="pb-2">Winners</th>
+                        <th className="pb-2">Per Winner</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-gray-100">
                       <tr>
-                        <td className="py-2.5 font-bold text-[#00F29D]">Tier 5 (Jackpot)</td>
-                        <td className="py-2.5 font-mono">${simulationResult.tiers.tier5.totalPool.toFixed(2)}</td>
-                        <td className="py-2.5 font-bold">{simulationResult.tiers.tier5.winnersCount}</td>
-                        <td className="py-2.5 font-mono font-bold text-[#00F29D]">
-                          ${simulationResult.tiers.tier5.prizePerWinner.toFixed(2)}
+                        <td className="py-2.5 font-bold text-[#11382B]">Tier 5 Match</td>
+                        <td className="py-2.5 font-mono">${(simulationResult.tiers?.tier5?.totalPool ?? 0).toFixed(2)}</td>
+                        <td className="py-2.5 font-bold">{simulationResult.tiers?.tier5?.winnersCount ?? 0}</td>
+                        <td className="py-2.5 font-mono font-bold text-[#11382B]">
+                          ${(simulationResult.tiers?.tier5?.prizePerWinner ?? 0).toFixed(2)}
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 font-bold text-[#00D2FF]">Tier 4 Match</td>
-                        <td className="py-2.5 font-mono">${simulationResult.tiers.tier4.totalPool.toFixed(2)}</td>
-                        <td className="py-2.5 font-bold">{simulationResult.tiers.tier4.winnersCount}</td>
-                        <td className="py-2.5 font-mono font-bold text-[#00D2FF]">
-                          ${simulationResult.tiers.tier4.prizePerWinner.toFixed(2)}
+                        <td className="py-2.5 font-bold text-blue-600">Tier 4 Match</td>
+                        <td className="py-2.5 font-mono">${(simulationResult.tiers?.tier4?.totalPool ?? 0).toFixed(2)}</td>
+                        <td className="py-2.5 font-bold">{simulationResult.tiers?.tier4?.winnersCount ?? 0}</td>
+                        <td className="py-2.5 font-mono font-bold text-blue-600">
+                          ${(simulationResult.tiers?.tier4?.prizePerWinner ?? 0).toFixed(2)}
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 font-bold text-[#FF6E40]">Tier 3 Match</td>
-                        <td className="py-2.5 font-mono">${simulationResult.tiers.tier3.totalPool.toFixed(2)}</td>
-                        <td className="py-2.5 font-bold">{simulationResult.tiers.tier3.winnersCount}</td>
-                        <td className="py-2.5 font-mono font-bold text-[#FF6E40]">
-                          ${simulationResult.tiers.tier3.prizePerWinner.toFixed(2)}
+                        <td className="py-2.5 font-bold text-[#E25B37]">Tier 3 Match</td>
+                        <td className="py-2.5 font-mono">${(simulationResult.tiers?.tier3?.totalPool ?? 0).toFixed(2)}</td>
+                        <td className="py-2.5 font-bold">{simulationResult.tiers?.tier3?.winnersCount ?? 0}</td>
+                        <td className="py-2.5 font-mono font-bold text-[#E25B37]">
+                          ${(simulationResult.tiers?.tier3?.prizePerWinner ?? 0).toFixed(2)}
                         </td>
                       </tr>
                     </tbody>
@@ -324,7 +322,7 @@ export default function AdminDrawsPage() {
                 </div>
               </div>
             ) : (
-              <div className="p-12 text-center text-[#64748B] text-xs">
+              <div className="p-12 text-center text-gray-400 text-xs">
                 Click &ldquo;Run Dry-Run Simulation&rdquo; to project real payouts across the database subscriber pool.
               </div>
             )}
@@ -332,15 +330,15 @@ export default function AdminDrawsPage() {
         </div>
 
         {/* Published Draw History */}
-        <div className="mt-8 pt-6 border-t border-white/10">
+        <div className="mt-8 pt-6 border-t border-gray-100">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Recent Published Draws ({draws.length})
             </h4>
             {draws.length > 0 && (
               <button
                 onClick={() => handleDeleteDraw()}
-                className="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                className="px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
                 title="Clear all test draws and winner records"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -351,34 +349,34 @@ export default function AdminDrawsPage() {
 
           <div className="space-y-2">
             {draws.length === 0 ? (
-              <p className="text-xs text-[#64748B] italic p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <p className="text-xs text-gray-400 italic p-4 rounded-2xl bg-gray-50 border border-gray-200 text-center">
                 No published draws in ledger. Run the simulation above to publish a draw.
               </p>
             ) : (
               draws.map(d => (
                 <div
                   key={d.id}
-                  className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs"
+                  className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between text-xs"
                 >
                   <div>
-                    <span className="font-mono font-bold text-white">{d.period}</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-[#00F29D] font-bold ml-2">
+                    <span className="font-mono font-bold text-[#111827]">{d.period}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#00D284]/15 text-[#11382B] border border-[#00D284]/30 font-bold ml-2">
                       {d.mode}
                     </span>
-                    <span className="text-slate-400 ml-2">
+                    <span className="text-gray-500 ml-2">
                       Numbers: [{d.target_numbers.join(', ')}]
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-right font-mono">
-                      <span className="text-white font-bold">${Number(d.pool_total).toLocaleString()}</span>
-                      <span className="text-[10px] text-amber-400 block">
+                      <span className="text-[#111827] font-bold">${Number(d.pool_total).toLocaleString()}</span>
+                      <span className="text-[10px] text-amber-600 block">
                         Rollover: ${Number(d.jackpot_rollover_out).toLocaleString()}
                       </span>
                     </div>
                     <button
                       onClick={() => handleDeleteDraw(d.id)}
-                      className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 transition-colors"
+                      className="p-1.5 rounded-full bg-white hover:bg-rose-50 text-gray-400 hover:text-rose-600 border border-gray-200 transition-colors"
                       title="Delete this draw"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

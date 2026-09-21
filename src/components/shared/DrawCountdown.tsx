@@ -9,6 +9,8 @@ interface DrawCountdownProps {
   compact?: boolean;
   /** Show label text */
   showLabel?: boolean;
+  /** Custom classes for countdown text */
+  className?: string;
 }
 
 function getEndOfMonth(): Date {
@@ -32,7 +34,7 @@ function pad(n: number): string {
   return n.toString().padStart(2, '0');
 }
 
-export default function DrawCountdown({ targetDate, compact = false, showLabel = true }: DrawCountdownProps) {
+export default function DrawCountdown({ targetDate, compact = false, showLabel = true, className }: DrawCountdownProps) {
   const [target] = useState(() => targetDate || getEndOfMonth());
   const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(target));
 
@@ -56,7 +58,7 @@ export default function DrawCountdown({ targetDate, compact = false, showLabel =
 
   if (compact) {
     return (
-      <span className="font-mono font-bold text-white tabular-nums">
+      <span className={`font-mono font-bold tabular-nums ${className || 'text-[#111827]'}`}>
         {timeLeft.days}d : {pad(timeLeft.hours)}h : {pad(timeLeft.minutes)}m : {pad(timeLeft.seconds)}s
       </span>
     );

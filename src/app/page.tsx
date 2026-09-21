@@ -6,14 +6,17 @@ import CharitySpotlight from '@/components/home/CharitySpotlight';
 import DrawMechanicsSection from '@/components/home/DrawMechanicsSection';
 import PricingSection from '@/components/home/PricingSection';
 
+import ClosingCtaBand from '@/components/home/ClosingCtaBand';
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col bg-[#06080F] text-[#F8FAFC]">
+    <main className="min-h-screen flex flex-col bg-[#FAFAF8] text-[#111827]">
       <Navbar />
       <HeroSection />
-      <CharitySpotlight />
       <DrawMechanicsSection />
+      <CharitySpotlight />
       <PricingSection />
+      <ClosingCtaBand />
       <Footer />
     </main>
   );

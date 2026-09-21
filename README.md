@@ -60,16 +60,21 @@ As specified in the PRD, intentional ambiguities have been formally resolved as 
 
 ---
 
-## 3. Test Credentials & Evaluator Switcher
+## 3. Verified System Credentials & Evaluator Personas
 
-The top navigation bar includes an **Evaluator Persona Switcher** dropdown for instantaneous multi-role review:
+### Live Database & Supabase Auth Credentials
+For full authentication testing via the [`/login`](/login) form or direct session access:
 
-| Role | Name | Email / ID | Capabilities |
-| :--- | :--- | :--- | :--- |
-| **Administrator** | Marcus Vance | `admin@digitalheroes.org` / `admin-001` | Full control: configure draws, simulate dry-runs, publish draws, review winner proofs, edit user scores, charity CMS, analytics. |
-| **Active Subscriber** | Alex Morgan | `alex.morgan@example.com` / `sub-001` | Active rolling 5 scores, draw eligibility, charity slider (15%), proof upload. |
-| **Active Subscriber** | Sarah Jenkins | `sarah.jenkins@example.com` / `sub-002` | Active subscriber, designated to Veterans On The Green (25%). |
-| **Past Due / Lapsed** | Elena Rostova | `elena.rostova@example.com` / `sub-004` | Demonstrates server-side restriction: cannot log scores or enter draws until payment is updated. |
+| Role | Name | Email | Password | Access / Capabilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **Administrator** | Platform Administrator | `admin@digitalheroes.com` | `Admin1234!` | Full Platform Control: `/admin` suite, draw simulation, publishing draws, winner verification, user and score management. |
+| **Active Subscriber** | Aggi Sanjay | `aggisanjay1234@gmail.com` | `password123` | Member Workspace: `/dashboard`, tactile scores, draw eligibility, designated charity selection, billing management. |
+
+### Top Navigation Evaluator Switcher
+For quick instantaneous multi-role review without typing passwords, use the role switcher in the header:
+- **Admin**: `admin@digitalheroes.org` (Full Administrative Suite)
+- **Active Subscriber**: `alex.morgan@example.com` (Draw Ready, 5 Rolling Scores)
+- **Past Due**: `elena.rostova@example.com` (Billing Alert State)
 
 ---
 
@@ -101,7 +106,49 @@ Visit [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 5. Environment Variables (`.env.example`)
+## 5. Default Credentials
+
+The system comes pre-configured with the following verified test accounts:
+
+| Role | Email | Password | Access / Scope |
+| :--- | :--- | :--- | :--- |
+| **Administrator** | `admin@digitalheroes.com` | `Admin1234!` | Full Platform Access (`/admin`, `/dashboard`, draw simulation & publish, winner claim approval) |
+| **Active Subscriber** | `aggisanjay1234@gmail.com` | `password123` | Member Workspace (`/dashboard`, score entry, jackpot eligibility, designated charity) |
+
+---
+
+## 6. Stripe Webhook Configuration
+
+The webhook handler is implemented at `/api/stripe/webhook` ([src/app/api/stripe/webhook/route.ts](src/app/api/stripe/webhook/route.ts)).
+
+### Required Events
+- `checkout.session.completed` — Activates membership subscriptions and records direct donations.
+- `customer.subscription.updated` — Synchronizes tier upgrades/downgrades and renewal status.
+- `customer.subscription.deleted` — Sets membership status to canceled.
+- `invoice.payment_failed` — Marks account `past_due` in Supabase PostgreSQL.
+
+### Automatic Webhook Registration
+To automatically register the webhook endpoint with your Stripe account and save `STRIPE_WEBHOOK_SECRET` to `.env.local`:
+```bash
+node scripts/create-stripe-webhook.mjs https://your-domain.vercel.app
+```
+
+### Local Testing & Simulation
+To test webhook processing locally without external tunnels:
+```bash
+# Test successful subscription checkout
+node scripts/test-stripe-event.mjs payment_success
+
+# Test payment failure (marks past_due)
+node scripts/test-stripe-event.mjs payment_failed
+
+# Test subscription cancellation
+node scripts/test-stripe-event.mjs subscription_canceled
+```
+
+---
+
+## 7. Environment Variables (`.env.example`)
 
 ```ini
 # Supabase PostgreSQL & Auth
@@ -120,7 +167,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ---
 
-## 6. Database Migrations & Seeds
+## 8. Database Migrations & Seeds
 
 The full SQL schema with Row Level Security (RLS) policies and PostgreSQL triggers is located at:
 - Schema Migration: [`supabase/migrations/01_initial_schema.sql`](supabase/migrations/01_initial_schema.sql)
@@ -133,7 +180,7 @@ To apply to your live Supabase project:
 
 ---
 
-## 7. Automated Test Suites
+## 9. Automated Test Suites
 
 ### Unit Tests (`npm run test`)
 - 13 passing unit tests verifying:
@@ -154,7 +201,7 @@ To apply to your live Supabase project:
 
 ---
 
-## 8. Deployment Instructions (Vercel)
+## 10. Deployment Instructions (Vercel)
 
 1. Push code to your GitHub / GitLab repository.
 2. Log into [Vercel](https://vercel.com) and click **Add New Project**.
