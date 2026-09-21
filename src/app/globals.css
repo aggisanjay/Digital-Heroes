@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-obsidian: #06080F;
+  --bg-card: #0D1322;
+  --bg-card-hover: #131C31;
+  --bg-card-elevated: #18233C;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-bright: rgba(255, 255, 255, 0.16);
+  
+  /* Primary Victory / Draw Energy */
+  --accent-mint: #00F29D;
+  --accent-mint-hover: #00D88B;
+  --accent-cyan: #00D2FF;
+  
+  /* Warm Charity / Human Impact */
+  --accent-coral: #FF6E40;
+  --accent-coral-hover: #F4511E;
+  --accent-gold: #FFA000;
+  
+  /* Text */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  selection-background-color: var(--accent-mint);
+  selection-color: #06080F;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-jakarta), var(--font-inter), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Glassmorphic Panels */
+.glass-panel {
+  background: rgba(13, 19, 34, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-elevated {
+  background: rgba(19, 28, 49, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass-bright);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(0, 242, 157, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -12px rgba(0, 242, 157, 0.18);
+}
+
+.glass-panel-coral-hover:hover {
+  border-color: rgba(255, 110, 64, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -12px rgba(255, 110, 64, 0.18);
+}
+
+/* Radiant Gradient Texts */
+.gradient-text-mint {
+  background: linear-gradient(135deg, #00F29D 0%, #00D2FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-coral {
+  background: linear-gradient(135deg, #FF6E40 0%, #FFA000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-white {
+  background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ambient Radial Mesh */
+.ambient-glow-mint {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 242, 157, 0.12) 0%, rgba(6, 8, 15, 0) 70%);
+}
+
+.ambient-glow-coral {
+  background: radial-gradient(circle at 50% 0%, rgba(255, 110, 64, 0.12) 0%, rgba(6, 8, 15, 0) 70%);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #00F29D 0%, #00D88B 100%);
+  color: #06080F;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(0, 242, 157, 0.35);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 28px 0 rgba(0, 242, 157, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-charity {
+  background: linear-gradient(135deg, #FF6E40 0%, #F4511E 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(255, 110, 64, 0.35);
+}
+
+.btn-charity:hover {
+  box-shadow: 0 6px 28px 0 rgba(255, 110, 64, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #06080F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }
