@@ -18,6 +18,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import RoleBadge from '@/components/shared/RoleBadge';
+import { store } from '@/lib/data/mock-db';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
@@ -41,11 +42,12 @@ export default function AdminSidebar() {
   const handleSignOut = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.push('/login');
-      router.refresh();
-    } catch {
-      router.push('/login');
+    } catch (e) {
+      console.warn('Admin logout request failed:', e);
     }
+    store.logout();
+    router.push('/login');
+    router.refresh();
   };
 
   const navItems = [

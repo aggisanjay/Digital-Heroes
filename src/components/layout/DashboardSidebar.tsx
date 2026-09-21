@@ -20,6 +20,7 @@ import {
   Clock
 } from 'lucide-react';
 import RoleBadge from '@/components/shared/RoleBadge';
+import { store } from '@/lib/data/mock-db';
 
 interface UserData {
   id: string;
@@ -58,11 +59,12 @@ export default function DashboardSidebar() {
   const handleSignOut = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.push('/login');
-      router.refresh();
-    } catch {
-      router.push('/login');
+    } catch (e) {
+      console.warn('Logout request failed:', e);
     }
+    store.logout();
+    router.push('/login');
+    router.refresh();
   };
 
   const navItems = [
