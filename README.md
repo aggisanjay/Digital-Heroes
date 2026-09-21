@@ -113,7 +113,7 @@ The system comes pre-configured with the following verified test accounts:
 | Role | Email | Password | Access / Scope |
 | :--- | :--- | :--- | :--- |
 | **Administrator** | `admin@digitalheroes.com` | `Admin1234!` | Full Platform Access (`/admin`, `/dashboard`, draw simulation & publish, winner claim approval) |
-| **Active Subscriber** | `aggisanjay1234@gmail.com` | `password123` | Member Workspace (`/dashboard`, score entry, jackpot eligibility, designated charity) |
+
 
 ---
 
