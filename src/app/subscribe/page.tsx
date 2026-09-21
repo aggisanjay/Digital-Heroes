@@ -23,29 +23,62 @@ function SubscribeContent() {
   const [charityPct, setCharityPct] = useState<number>(15);
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [paymentMode, setPaymentMode] = useState<'card' | 'hosted'>('card');
+  const [paymentMode, setPaymentMode] = useState<'card' | 'hosted'>('hosted');
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
 
   useEffect(() => {
-    const list = store.getCharities();
-    setCharities(list);
-    const current = store.getCurrentUser();
-    setCurrentUser(current);
-    if (current) {
-      if (current.full_name) setFullName(current.full_name);
-      if (current.email) setEmail(current.email);
-      if (current.charity_contribution_pct) setCharityPct(current.charity_contribution_pct);
-    } else {
-      setFullName('');
-      setEmail('');
+    async function initPage() {
+      // 1. Load charities
+      try {
+        const charRes = await fetch('/api/charities');
+        if (charRes.ok) {
+          const charData = await charRes.json();
+          if (charData.charities?.length > 0) {
+            setCharities(charData.charities);
+          } else {
+            setCharities(store.getCharities());
+          }
+        } else {
+          setCharities(store.getCharities());
+        }
+      } catch {
+        setCharities(store.getCharities());
+      }
+
+      // 2. Load authenticated user session
+      let user: Profile | null = null;
+      try {
+        const authRes = await fetch('/api/auth/me');
+        if (authRes.ok) {
+          const authData = await authRes.json();
+          if (authData.user) {
+            user = authData.user;
+          }
+        }
+      } catch {}
+
+      if (!user) {
+        user = store.getCurrentUser();
+      }
+
+      setCurrentUser(user);
+      if (user) {
+        if (user.full_name) setFullName(user.full_name);
+        if (user.email) setEmail(user.email);
+        if (user.charity_contribution_pct) setCharityPct(user.charity_contribution_pct);
+      }
+
+      if (preselectedCharityId) {
+        setSelectedCharityId(preselectedCharityId);
+      } else if (user?.charity_id) {
+        setSelectedCharityId(user.charity_id);
+      } else {
+        const list = store.getCharities();
+        if (list.length > 0) setSelectedCharityId(list[0].id);
+      }
     }
-    if (preselectedCharityId) {
-      setSelectedCharityId(preselectedCharityId);
-    } else if (current?.charity_id) {
-      setSelectedCharityId(current.charity_id);
-    } else if (list.length > 0) {
-      setSelectedCharityId(list[0].id);
-    }
+
+    initPage();
   }, [preselectedCharityId]);
 
   const handleHostedCheckout = async () => {

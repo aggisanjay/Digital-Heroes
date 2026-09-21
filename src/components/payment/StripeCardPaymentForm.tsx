@@ -116,8 +116,8 @@ export default function StripeCardPaymentForm({
     setIsProcessing(true);
 
     try {
-      // 1. Create or get payment intent / checkout session from server
-      const intentRes = await fetch('/api/stripe/payment-intent', {
+      // 1. Create real subscription checkout session from server
+      const intentRes = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
